@@ -1,14 +1,21 @@
+import bullsLogo from "@/assets/houses/bulldozing-bulls.jpg";
+import wolvesLogo from "@/assets/houses/wildfire-wolves.jpg";
+import ravensLogo from "@/assets/houses/raging-ravens.jpg";
+import sharksLogo from "@/assets/houses/savage-sharks.jpg";
+
 export const scoring = { gold: 25, silver: 15, bronze: 10, totalPossible: 800 } as const;
 
 export type HouseId = "a" | "b" | "c" | "d";
 export type Medal = "gold" | "silver" | "bronze";
 
-const unsortedHouses: { id: HouseId; name: string; points: number; medals: Record<Medal, number>; mark: string }[] = [
-  { id: "a", name: "House A", points: 245, medals: { gold: 4, silver: 2, bronze: 1 }, mark: "A" },
-  { id: "b", name: "House B", points: 221, medals: { gold: 3, silver: 3, bronze: 2 }, mark: "B" },
-  { id: "c", name: "House C", points: 184, medals: { gold: 2, silver: 2, bronze: 3 }, mark: "C" },
-  { id: "d", name: "House D", points: 150, medals: { gold: 1, silver: 2, bronze: 2 }, mark: "D" },
+const unsortedHouses: { id: HouseId; name: string; code: string; color: string; points: number; medals: Record<Medal, number>; mark: string; logo: string }[] = [
+  { id: "a", name: "Bulldozing Bulls", code: "BB", color: "#E0393E", points: 245, medals: { gold: 4, silver: 2, bronze: 1 }, mark: "B", logo: bullsLogo },
+  { id: "b", name: "Wildfire Wolves", code: "WW", color: "#F07A1A", points: 221, medals: { gold: 3, silver: 3, bronze: 2 }, mark: "W", logo: wolvesLogo },
+  { id: "c", name: "Raging Ravens", code: "RR", color: "#E8B90C", points: 184, medals: { gold: 2, silver: 2, bronze: 3 }, mark: "R", logo: ravensLogo },
+  { id: "d", name: "Savage Sharks", code: "SS", color: "#1F8FD1", points: 150, medals: { gold: 1, silver: 2, bronze: 2 }, mark: "S", logo: sharksLogo },
 ];
+// Fixed display order for the house roster (houses above is sorted by points).
+export const houseRoster = [...unsortedHouses];
 export const houses = unsortedHouses.sort((a, b) => b.points - a.points || b.medals.gold - a.medals.gold || b.medals.silver - a.medals.silver || b.medals.bronze - a.medals.bronze);
 
 export type Sport = { slug: string; name: string; date: string; venue: string; events: string[]; kind: "knockout" | "race" };
@@ -28,7 +35,7 @@ export const sports: Sport[] = [
 
 export const venues = ["Bright Money Office", "St. John's Ground", "Venue to be confirmed"];
 
-export type ScheduleDay = { date: string; weekday: string; title: string; events: string[]; venue: string; finale?: boolean; sportSlug?: string };
+export type ScheduleDay = { date: string; weekday: string; title: string; events: string[]; venue: string; time?: string; finale?: boolean; sportSlug?: string };
 export const schedule: ScheduleDay[] = [
   { date: "18 SEP", weekday: "FRI", title: "Auction Day", events: ["Squads drafted live"], venue: "Bright Money Office" },
   { date: "06 OCT", weekday: "TUE", title: "Carrom Singles", events: ["Carrom Singles"], venue: "Bright Money Office", sportSlug: "carrom" },
