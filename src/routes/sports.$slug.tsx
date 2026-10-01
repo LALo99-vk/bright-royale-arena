@@ -1,11 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
-import { ArrowLeft, ArrowUpRight, MapPin } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { ArrowLeft, ArrowUpRight, Camera, Play, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SectionHeading, Podium } from "@/components/championship/Sections";
-import { brackets, fixtures, houseById, results, sports } from "@/data/mockData";
-import carromImage from "@/assets/carrom-match.jpg";
-import footballImage from "@/assets/championship-court.jpg";
+import { Podium } from "@/components/championship/Sections";
+import { results, sports } from "@/data/mockData";
+import { demoBrackets } from "@/data/demo-brackets";
+import { Bracket } from "@/components/bracket";
 
 export const Route = createFileRoute("/sports/$slug")({
   loader: ({ params }) => { const sport = sports.find(item => item.slug === params.slug); if (!sport) throw notFound(); return { sport }; },
@@ -16,25 +16,56 @@ export const Route = createFileRoute("/sports/$slug")({
   ] }; }, component: SportPage,
 });
 
+const TABS = ["Details", "Matches", "Gallery", "Videos", "Winners"] as const;
+type Tab = (typeof TABS)[number];
+
 function SportPage() {
   const { sport } = Route.useLoaderData();
+  const [tab, setTab] = useState<Tab>("Details");
   const [event, setEvent] = useState(sport.events[0] ?? "Final");
-  const [view, setView] = useState<"fixtures" | "bracket" | "results" | "podium">("fixtures");
-  const activeFixtures = (fixtures[sport.slug] ?? []).filter(fixture => fixture.event === event);
-  const activeResults = results.filter(result => result.sportSlug === sport.slug && (sport.events.length === 1 || result.event.toLowerCase().includes(event.toLowerCase())));
-  const image = ["carrom", "table-tennis", "chess", "foosball", "darts"].includes(sport.slug) ? carromImage : footballImage;
+  const draw = demoBrackets[sport.slug]?.[event] ?? (sport.events.length === 1 ? Object.values(demoBrackets[sport.slug] ?? {})[0] : undefined);
+  const sportResults = results.filter(result => result.sportSlug === sport.slug);
+  const medalEvents = sport.events.filter(e => e !== "Final" && e !== "Heats");
   return <main>
-    <section className="sport-intro"><div className="page-width sport-intro-grid"><div className="sport-intro-copy"><Link to="/sports" className="back-link"><ArrowLeft size={17}/> ALL SPORTS</Link><div className="eyebrow light"><span className="eyebrow-line"/> THE GAMES / 2026</div><h1>{sport.name}<span>.</span></h1><div className="sport-intro-facts"><div><span>DATE</span><strong>{sport.date}</strong></div><div><span>VENUE</span><strong>{sport.venue}</strong></div><div><span>MEDAL EVENTS</span><strong>{sport.events.length.toString().padStart(2, "0")}</strong></div></div></div><div className="sport-intro-image"><img src={image} alt={`${sport.name} tournament atmosphere`} width={1408} height={912}/></div></div></section>
-    <section className="section page-width sport-content"><SectionHeading kicker="01 / TOURNAMENT CENTRE" title="THE COMPETITION" aside={`${sport.date} / ${sport.venue}`}/>
-      {sport.events.length > 1 && <div className="event-tabs" role="tablist" aria-label="Medal event">{sport.events.map(item => <Button key={item} variant="ghost" role="tab" aria-selected={event === item} className={event === item ? "event-tab active" : "event-tab"} onClick={() => { setEvent(item); setView("fixtures"); }}>{item}</Button>)}</div>}
-      <div className="view-tabs" role="tablist" aria-label="Tournament information">{(["fixtures", "bracket", "results", "podium"] as const).map(item => <Button key={item} variant="ghost" role="tab" aria-selected={view === item} className={view === item ? "view-tab active" : "view-tab"} onClick={() => setView(item)}>{item}</Button>)}</div>
-      {view === "fixtures" && <div className="fixtures-panel"><div className="panel-label"><span>MATCHES / {event.toUpperCase()}</span><span>{activeFixtures.length} FIXTURES</span></div>{activeFixtures.map(fixture => <article className="fixture-row" key={fixture.id}><div className="fixture-detail"><span>{fixture.round}</span><strong>{fixture.date}</strong></div><div className="fixture-teams"><span>{houseById(fixture.home)}</span><em>VS</em><span>{houseById(fixture.away)}</span></div><span className="fixture-status">{fixture.status === "upcoming" ? "UPCOMING" : `${fixture.homeScore} — ${fixture.awayScore}`}</span></article>)}</div>}
-      {view === "bracket" && <div className="bracket-scroll" aria-label="Tournament bracket"><div className="bracket-grid">{(brackets[sport.slug] ?? []).map(round => <div className="bracket-round" key={round.round}><div className="panel-label">{round.round.toUpperCase()}</div>{round.matches.map(match => <div className="bracket-match" key={match}><span>{match}</span><ArrowUpRight size={19}/></div>)}</div>)}<div className="bracket-round"><div className="panel-label">PODIUM</div><div className="bracket-match"><span>To be decided</span><span className="medal-dot gold"/></div></div></div></div>}
-      {view === "results" && <div className="tournament-results">{activeResults.length ? activeResults.map(result => <article key={result.event}><div className="panel-label">{result.date} / FINAL RESULT</div><h3>{result.event}</h3><Podium result={result}/></article>) : <EmptyState title="NO RESULTS YET" body="Results will appear here after the final whistle."/>}</div>}
-      {view === "podium" && <div className="tournament-results">{activeResults.length ? activeResults.map(result => <article key={result.event}><div className="panel-label">{result.event.toUpperCase()} / PODIUM</div><Podium result={result}/></article>) : <EmptyState title="THE PODIUM AWAITS" body="Gold, silver and bronze will be decided on game day."/>}</div>}
+    <section className="sport-intro"><div className="page-width sport-intro-grid"><div className="sport-intro-copy"><Link to="/" hash="games" className="back-link"><ArrowLeft size={17}/> ALL TOURNAMENTS</Link><div className="eyebrow light">THE GAMES / 2026</div><h1>{sport.name}<span>.</span></h1></div></div></section>
+
+    <div className="sport-tabs-bar"><div className="page-width view-tabs" role="tablist" aria-label="Tournament sections">{TABS.map(item => <Button key={item} variant="ghost" role="tab" aria-selected={tab === item} className={tab === item ? "view-tab active" : "view-tab"} onClick={() => setTab(item)}>{item}</Button>)}</div></div>
+
+    <section className="page-width sport-content">
+      {tab === "Details" && <div className="sport-details">
+        <div>
+          <h2 className="panel-heading">About the tournament</h2>
+          <p className="sport-about">{sport.name} is one of eleven sports at Bright Battle Royale 2026. All four houses compete{medalEvents.length > 1 ? ` across ${medalEvents.length} medal events (${medalEvents.join(", ")})` : " for one set of medals"}, and every event is worth 50 points to the house table.</p>
+          <dl className="sport-info">
+            <div><dt>Format</dt><dd>{sport.kind === "race" ? "Heats to a final" : "Knockout"}</dd></div>
+            <div><dt>Field</dt><dd>All four houses</dd></div>
+            <div><dt>Medal events</dt><dd>{medalEvents.length || 1}</dd></div>
+            <div><dt>Points</dt><dd>Gold 25 · Silver 15 · Bronze 10</dd></div>
+          </dl>
+        </div>
+        <aside className="sport-glance">
+          <p className="panel-label">At a glance</p>
+          <dl>
+            <div><dt>Date</dt><dd>{sport.date}</dd></div>
+            <div><dt>Time</dt><dd>To be announced</dd></div>
+            <div><dt>Venue</dt><dd>{sport.venue}</dd></div>
+          </dl>
+        </aside>
+      </div>}
+
+      {tab === "Matches" && <>
+        {sport.events.length > 1 && <div className="event-tabs" role="tablist" aria-label="Medal event">{sport.events.map(item => <Button key={item} variant="ghost" role="tab" aria-selected={event === item} className={event === item ? "event-tab active" : "event-tab"} onClick={() => setEvent(item)}>{item}</Button>)}</div>}
+        {draw ? <Bracket rounds={draw.rounds} kind={draw.kind} courtLabel="Table" title={`${sport.name} — ${event}`}/> : <EmptyState icon={<Trophy size={25}/>} title="The draw is on its way" body="The bracket appears here once the draw is made."/>}
+      </>}
+
+      {tab === "Gallery" && <EmptyState icon={<Camera size={25}/>} title="Photos are on their way" body="Check back after game day."/>}
+      {tab === "Videos" && <EmptyState icon={<Play size={25}/>} title="Videos are on their way" body="Check back after game day."/>}
+
+      {tab === "Winners" && <div className="tournament-results">{sportResults.length ? sportResults.map(result => <article key={result.event}><div className="panel-label">{result.date} / FINAL RESULT</div><h3>{result.event}</h3><Podium result={result}/></article>) : <EmptyState icon={<Trophy size={25}/>} title="The podium awaits" body="Gold, silver and bronze will be decided on game day."/>}</div>}
     </section>
-    <section className="sport-more page-width"><Link to="/sports" className="text-arrow">EXPLORE ALL SPORTS <ArrowUpRight size={20}/></Link><Link to="/schedule" className="text-arrow">FULL SCHEDULE <ArrowUpRight size={20}/></Link></section>
+
+    <section className="sport-more page-width"><Link to="/" hash="games" className="text-arrow">ALL TOURNAMENTS <ArrowUpRight size={20}/></Link><Link to="/schedule" className="text-arrow">FULL SCHEDULE <ArrowUpRight size={20}/></Link></section>
   </main>;
 }
 
-function EmptyState({ title, body }: { title: string; body: string }) { return <div className="empty-state"><MapPin size={25}/><h3>{title}</h3><p>{body}</p></div>; }
+function EmptyState({ icon, title, body }: { icon: ReactNode; title: string; body: string }) { return <div className="empty-state">{icon}<h3>{title}</h3><p>{body}</p></div>; }

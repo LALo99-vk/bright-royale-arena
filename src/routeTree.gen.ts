@@ -10,14 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuctionRouteImport } from './routes/auction'
 import { Route as PointsRouteImport } from './routes/points'
 import { Route as ScheduleRouteImport } from './routes/schedule'
-import { Route as SportsIndexRouteImport } from './routes/sports.index'
 import { Route as SportsSlugRouteImport } from './routes/sports.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuctionRoute = AuctionRouteImport.update({
+  id: '/auction',
+  path: '/auction',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PointsRoute = PointsRouteImport.update({
@@ -30,11 +35,6 @@ const ScheduleRoute = ScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SportsIndexRoute = SportsIndexRouteImport.update({
-  id: '/sports/',
-  path: '/sports/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SportsSlugRoute = SportsSlugRouteImport.update({
   id: '/sports/$slug',
   path: '/sports/$slug',
@@ -43,40 +43,40 @@ const SportsSlugRoute = SportsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auction': typeof AuctionRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
   '/sports/$slug': typeof SportsSlugRoute
-  '/sports/': typeof SportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auction': typeof AuctionRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
   '/sports/$slug': typeof SportsSlugRoute
-  '/sports': typeof SportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auction': typeof AuctionRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
   '/sports/$slug': typeof SportsSlugRoute
-  '/sports/': typeof SportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/points' | '/schedule' | '/sports/$slug' | '/sports/'
+  fullPaths: '/' | '/auction' | '/points' | '/schedule' | '/sports/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/points' | '/schedule' | '/sports/$slug' | '/sports'
-  id: '__root__' | '/' | '/points' | '/schedule' | '/sports/$slug' | '/sports/'
+  to: '/' | '/auction' | '/points' | '/schedule' | '/sports/$slug'
+  id: '__root__' | '/' | '/auction' | '/points' | '/schedule' | '/sports/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuctionRoute: typeof AuctionRoute
   PointsRoute: typeof PointsRoute
   ScheduleRoute: typeof ScheduleRoute
   SportsSlugRoute: typeof SportsSlugRoute
-  SportsIndexRoute: typeof SportsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auction': {
+      id: '/auction'
+      path: '/auction'
+      fullPath: '/auction'
+      preLoaderRoute: typeof AuctionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/points': {
@@ -102,13 +109,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScheduleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sports/': {
-      id: '/sports/'
-      path: '/sports'
-      fullPath: '/sports/'
-      preLoaderRoute: typeof SportsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/sports/$slug': {
       id: '/sports/$slug'
       path: '/sports/$slug'
@@ -121,10 +121,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuctionRoute: AuctionRoute,
   PointsRoute: PointsRoute,
   ScheduleRoute: ScheduleRoute,
   SportsSlugRoute: SportsSlugRoute,
-  SportsIndexRoute: SportsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
