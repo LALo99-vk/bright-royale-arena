@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PointsRouteImport } from './routes/points'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as SportsIndexRouteImport } from './routes/sports.index'
+import { Route as SportsSlugRouteImport } from './routes/sports.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,17 +35,24 @@ const SportsIndexRoute = SportsIndexRouteImport.update({
   path: '/sports/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SportsSlugRoute = SportsSlugRouteImport.update({
+  id: '/sports/$slug',
+  path: '/sports/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
+  '/sports/$slug': typeof SportsSlugRoute
   '/sports/': typeof SportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
+  '/sports/$slug': typeof SportsSlugRoute
   '/sports': typeof SportsIndexRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
+  '/sports/$slug': typeof SportsSlugRoute
   '/sports/': typeof SportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/points' | '/schedule' | '/sports/'
+  fullPaths: '/' | '/points' | '/schedule' | '/sports/$slug' | '/sports/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/points' | '/schedule' | '/sports'
-  id: '__root__' | '/' | '/points' | '/schedule' | '/sports/'
+  to: '/' | '/points' | '/schedule' | '/sports/$slug' | '/sports'
+  id: '__root__' | '/' | '/points' | '/schedule' | '/sports/$slug' | '/sports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PointsRoute: typeof PointsRoute
   ScheduleRoute: typeof ScheduleRoute
+  SportsSlugRoute: typeof SportsSlugRoute
   SportsIndexRoute: typeof SportsIndexRoute
 }
 
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SportsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sports/$slug': {
+      id: '/sports/$slug'
+      path: '/sports/$slug'
+      fullPath: '/sports/$slug'
+      preLoaderRoute: typeof SportsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PointsRoute: PointsRoute,
   ScheduleRoute: ScheduleRoute,
+  SportsSlugRoute: SportsSlugRoute,
   SportsIndexRoute: SportsIndexRoute,
 }
 export const routeTree = rootRouteImport
