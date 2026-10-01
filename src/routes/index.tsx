@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDownRight, ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { houses, nextEvent, schedule, sports } from "@/data/mockData";
+import { nextEvent, schedule, sports } from "@/data/mockData";
 import { ResultsList, ScheduleList, SectionHeading, SportsList, Standings } from "@/components/championship/Sections";
 import footballImage from "@/assets/championship-court.jpg";
 import carromImage from "@/assets/carrom-match.jpg";
@@ -45,7 +45,7 @@ function Home() {
 
     <section className="section games-section page-width" id="games"><SectionHeading kicker="02 / PICK YOUR ARENA" title="THE GAMES" aside="Eleven ways to show up. One reason to give it everything."/><SportsList limit={8}/><div className="section-end"><span>{sports.length} SPORTS / 16 MEDAL EVENTS</span><Link to="/sports" className="text-arrow">ALL SPORTS <ArrowUpRight size={20}/></Link></div></section>
 
-    <section className="schedule-band" id="schedule"><div className="page-width"><SectionHeading kicker="03 / MARK YOUR CALENDAR" title="THE ROAD TO THE FINAL" aside="The build-up starts at the office. The finale belongs to everyone."/><ScheduleList days={schedule.filter(day => day.date !== "18 SEP").slice(0, 5).concat(schedule[schedule.length - 1] ? [schedule[schedule.length - 1]] : [])}/><div className="section-end"><span>06 — 17 OCTOBER 2026</span><Link to="/schedule" className="text-arrow">FULL SCHEDULE <ArrowUpRight size={20}/></Link></div></div></section>
+    <section className="schedule-band" id="schedule"><div className="page-width"><SectionHeading kicker="03 / MARK YOUR CALENDAR" title="THE ROAD TO THE FINAL" aside="The build-up starts at the office. The finale belongs to everyone."/><ScheduleList days={schedule.filter(day => day.date !== "18 SEP" && (day.date <= "10 OCT" || day.finale))}/><div className="section-end"><span>06 — 17 OCTOBER 2026</span><Link to="/schedule" className="text-arrow">FULL SCHEDULE <ArrowUpRight size={20}/></Link></div></div></section>
 
     <section className="section results-section page-width"><SectionHeading kicker="04 / ON THE BOARD" title="RECENT RESULTS" aside="The moments that shape the leaderboard."/><ResultsList limit={2}/><div className="section-end"><span>GOLD 25 / SILVER 15 / BRONZE 10</span><Link to="/points" className="text-arrow">SEE THE STANDINGS <ArrowUpRight size={20}/></Link></div></section>
 
