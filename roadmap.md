@@ -1,0 +1,3 @@
+- [x] Build Bright Battle Royale home with editorial introduction, next event, standings, sports, schedule and results.
+- [x] Add dedicated points and sport tournament views using centralized mock data.
+- [x] Check desktop/mobile rendering and interactions.
