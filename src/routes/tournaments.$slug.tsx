@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowUpRight, Camera, Play, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Podium } from "@/components/championship/Sections";
+import { EventWinners, NothingDecided } from "@/components/event-winners";
 import { Bracket } from "@/components/bracket";
 import { RaceBoard } from "@/components/race-board";
 import { VideoCard } from "@/components/video-card";
@@ -29,7 +29,7 @@ const TABS = ["Details", "Matches", "Gallery", "Videos", "Winners"] as const;
 type Tab = (typeof TABS)[number];
 
 function TournamentPage() {
-  const { tournament: t, sport, result, rules, fetchedAt } = Route.useLoaderData();
+  const { tournament: t, sport, winners, teams, rules, fetchedAt } = Route.useLoaderData();
   useAutoRefresh(LIVE_REFRESH_MS);
   const [tab, setTab] = useState<Tab>("Details");
   const isRace = Boolean(t.race?.length) || sport?.kind === "race";
@@ -74,7 +74,7 @@ function TournamentPage() {
       {tab === "Videos" && (t.videos.length ? <div className="grid grid-cols-2 items-start gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">{t.videos.map(v => <VideoCard key={v.id} video={v}/>)}</div>
         : <EmptyState icon={<Play size={25}/>} title="Videos are on their way" body="Check back after game day."/>)}
 
-      {tab === "Winners" && <div className="tournament-results">{result && result.status !== "pending" ? <article><div className="panel-label">{result.status === "complete" ? "FINAL RESULT" : "RESULT SO FAR"}</div><h3>{t.name}</h3><Podium event={result}/></article> : <EmptyState icon={<Trophy size={25}/>} title="The podium awaits" body="Gold, silver and bronze will be decided on game day."/>}</div>}
+      {tab === "Winners" && (winners ? <EventWinners sport={winners} teams={teams}/> : <NothingDecided sport={t.name}/>)}
     </section>
 
     <section className="sport-more page-width"><Link to="/" hash="games" className="text-arrow">ALL TOURNAMENTS <ArrowUpRight size={20}/></Link><Link to="/schedule" className="text-arrow">FULL SCHEDULE <ArrowUpRight size={20}/></Link></section>

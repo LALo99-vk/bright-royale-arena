@@ -12,9 +12,9 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { sportRules } from "@/data/event";
-import type { Tournament } from "@/data/tournaments";
+import { MEDALS, type EventResult, type SportPoints, type Tournament } from "@/data/tournaments";
 import { loadSheetData } from "@/lib/sheets";
-import { buildSportPoints } from "@/lib/points";
+import { findEventResult } from "@/lib/points";
 import { placeTournament } from "@/lib/sport-tournaments";
 
 /**
@@ -82,11 +82,15 @@ export const getTournamentPage = createServerFn({ method: "GET" })
     if (!t) return null;
 
     const place = placeTournament(t);
-    const result = place
-      ? (buildSportPoints(data.points)
-          .find((row) => row.slug === place.sport.slug)
-          ?.events.find((event) => event.name === place.event.name) ?? null)
-      : null;
+    // The medal podium, as at InMobi: a race takes its podium from the final's
+    // places; everything else from its Results row.
+    const ledger = place ? findEventResult(data.points, place.sport, place.event.label) : undefined;
+    const raced = raceWinners(t, ledger);
+    const winners: SportPoints | null = raced
+      ? { sport: place?.sport.name ?? t.sport, slug: place?.sport.slug ?? t.slug, events: [raced], points: {}, awarded: 0, pool: raced.pool, status: "complete" }
+      : ledger && place
+        ? { sport: place.sport.name, slug: place.sport.slug, events: [ledger], points: {}, awarded: ledger.awarded, pool: ledger.pool, status: ledger.status }
+        : null;
 
     const tournament: TournamentPage = {
       slug: t.slug,
@@ -112,7 +116,29 @@ export const getTournamentPage = createServerFn({ method: "GET" })
       rules,
       // Catalogue facts the sheet row may leave blank.
       sport: place ? { name: place.sport.name, date: place.sport.date, venue: place.sport.venue, kind: place.sport.kind } : null,
-      result,
+      winners,
+      teams: data.points.teams,
       fetchedAt: data.fetchedAt,
     };
   });
+
+/**
+ * A race's podium is its final: whoever the sheet has 1st, 2nd and 3rd, with
+ * the points from its Results row when there is one. Null until the final is
+ * run, or for anything that isn't a race. Ported from InMobi.
+ */
+function raceWinners(t: Tournament, ledger: EventResult | undefined): EventResult | null {
+  const final = t.race?.flatMap((round) => round.races).find((race) => race.final);
+  if (!final || final.status !== "completed") return null;
+  const medals = MEDALS.map((medal, i) => {
+    const entry = final.entries.find((e) => e.place === i + 1);
+    return {
+      medal,
+      points: ledger?.medals.find((m) => m.medal === medal)?.points ?? 0,
+      team: entry?.group,
+      winners: entry?.runner ? [entry.runner] : undefined,
+    };
+  });
+  return { sport: t.sport, category: t.name, medals, awarded: 0, pool: medals.reduce((sum, m) => sum + m.points, 0), status: "complete" };
+}
+

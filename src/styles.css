@@ -24,6 +24,9 @@
   --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
   --font-hero: "Barlow Condensed", Impact, sans-serif;
   --font-hero-sans: "DM Sans", Arial, sans-serif;
+  /* The medal podium engraves names in a serif, as at InMobi. */
+  --font-medal: "Cormorant Garamond", ui-serif, Georgia, "Times New Roman", serif;
+  --color-surface: var(--card);
   --color-ink-soft: var(--ink-soft);
   --color-mint-light: var(--mint-light);
   --color-spot: var(--spot);
@@ -274,3 +277,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @utility present-out { animation: present-out .2s ease-in both; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .connector-flow, .live-dot, .card-in, .present-in, .present-out { animation: none; } }
 
+
+/* The dark panel the medal podium sits on (ported from InMobi), in Bright's ink. */
+@utility ink-panel {
+  /* Deep Bright green, lit from above the gold medal like a stage. */
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgb(76 199 100 / 0.32), transparent 70%),
+    linear-gradient(180deg, #1c4a30 0%, #123222 55%, #0c2418 100%);
+  color: oklch(0.98 0.008 153);
+}
