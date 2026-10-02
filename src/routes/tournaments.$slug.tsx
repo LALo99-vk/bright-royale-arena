@@ -74,7 +74,13 @@ function TournamentPage() {
       {tab === "Videos" && (t.videos.length ? <div className="grid grid-cols-2 items-start gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">{t.videos.map(v => <VideoCard key={v.id} video={v}/>)}</div>
         : <EmptyState icon={<Play size={25}/>} title="Videos are on their way" body="Check back after game day."/>)}
 
-      {tab === "Winners" && (winners ? <EventWinners sport={winners} teams={teams}/> : <NothingDecided sport={t.name}/>)}
+      {tab === "Winners" && <section>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="rule-spot font-display text-2xl font-extrabold sm:text-3xl">Winners</h2>
+          <Link to="/points" className="text-xs text-muted-foreground transition-colors hover:text-spot">See the full standings</Link>
+        </div>
+        <div className="mt-10">{winners ? <EventWinners sport={winners} teams={teams}/> : <NothingDecided sport={t.name}/>}</div>
+      </section>}
     </section>
 
     <section className="sport-more page-width"><Link to="/" hash="games" className="text-arrow">ALL TOURNAMENTS <ArrowUpRight size={20}/></Link><Link to="/schedule" className="text-arrow">FULL SCHEDULE <ArrowUpRight size={20}/></Link></section>

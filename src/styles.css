@@ -311,3 +311,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .section-end > span { max-width: none; }
   .footer-right { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
+
+/* A short accent bar above a section title, as on InMobi's Winners heading. */
+@utility rule-spot {
+  &::before { content: ""; display: block; width: 2.5rem; height: 3px; background: var(--spot); margin-bottom: 1rem; }
+}
+
+/* House crests: rise in one after another, tilt a touch on hover or tap. */
+@keyframes crest-rise { from { opacity: 0; transform: translateY(10px) scale(.92); } to { opacity: 1; transform: none; } }
+.house-crest { animation: crest-rise .55s cubic-bezier(.2, .8, .2, 1) backwards; transition: transform .25s ease; }
+.house-crest:hover, .house-crest:active { transform: translateY(-3px) rotate(-3deg); }
+@media (prefers-reduced-motion: reduce) { .house-crest { animation: none; transition: none; } .house-crest:hover, .house-crest:active { transform: none; } }

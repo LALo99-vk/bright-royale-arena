@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
-export function SectionHeading({ kicker, title, aside, intro }: { kicker: string; title: string; aside?: string; intro?: string }) {
-  return <div className="section-heading"><div><div className="eyebrow">{kicker}</div><h2>{title}</h2>{intro && <p className="section-heading-intro">{intro}</p>}</div>{aside && <p>{aside}</p>}</div>;
+export function SectionHeading({ kicker, title, aside, intro }: { kicker?: string; title: string; aside?: string; intro?: string }) {
+  return <div className="section-heading"><div>{kicker && <div className="eyebrow">{kicker}</div>}<h2>{title}</h2>{intro && <p className="section-heading-intro">{intro}</p>}</div>{aside && <p>{aside}</p>}</div>;
 }
 
 export type TournamentRow = { slug: string; name: string; sport: string; format: string; dates: string; venue: string };
