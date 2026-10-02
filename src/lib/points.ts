@@ -144,3 +144,14 @@ export function buildStandings(table: SportPoints[]): Standing[] {
   });
   return rows;
 }
+
+/**
+ * The Results-tab row for one catalogue event, in the sheet's own shape — what
+ * the medal podium renders. Same matching as `buildSportPoints`.
+ */
+export function findEventResult(table: PointsTable, sport: Sport, label: string): EventResult | undefined {
+  const wanted = medalEventsOf(sport);
+  return table.sports
+    .flatMap((s) => s.events)
+    .find((r) => sameSport(r.sport, sport) && (wanted.length === 1 || eventKey(r.category) === eventKey(label)));
+}
