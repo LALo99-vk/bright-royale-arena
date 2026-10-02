@@ -287,15 +287,26 @@ button, a { -webkit-tap-highlight-color: transparent; }
   color: oklch(0.98 0.008 153);
 }
 
-/* Phones: a tournament row is the name with its sport and date beneath it,
-   so names stay on one line and the list reads at a glance. */
+/* Tournament rows, laid out like InMobi's: room to breathe, the name over its
+   format on the left, the dates over the venue on the right. */
+.sports-list { border-top-color: var(--border); }
+.sport-row { grid-template-columns: 72px minmax(0, 1.1fr) minmax(0, 1fr) 45px; min-height: 100px; padding: 24px 20px; }
+.sport-row .sport-arrow { color: var(--ink-soft); transition: transform .25s ease, color .2s ease; }
+.sport-row:hover .sport-arrow { color: var(--spot); }
+.sport-title { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.sport-row .sport-title strong { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+.sport-title small, .sport-when small { font-size: 14px; color: var(--ink-soft); }
+.sport-when { display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+
+/* Phones: the name, then its dates and venue beneath it. */
 @media (max-width: 760px) {
-  .sport-row { grid-template-columns: 30px minmax(0, 1fr) 22px; grid-template-areas: "num name arrow" "num meta arrow"; row-gap: 3px; min-height: 64px; padding: 10px 4px; }
-  .sport-row .sport-number { grid-area: num; }
-  .sport-row strong { grid-area: name; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sport-row .sport-meta { grid-area: meta; flex-direction: row; justify-content: flex-start; gap: 8px; font-size: 11px; color: var(--ink-soft); }
-  .sport-row .sport-meta .sport-date::before { content: "·"; margin-right: 8px; }
-  .sport-row .sport-date { min-width: 0; }
+  .sport-row { grid-template-columns: 30px minmax(0, 1fr) 22px; grid-template-areas: "num title arrow" "num when arrow"; row-gap: 6px; min-height: 84px; padding: 16px 4px; }
+  .sport-row .sport-number { grid-area: num; align-self: start; padding-top: 4px; }
+  .sport-title { grid-area: title; }
+  .sport-row .sport-title strong { font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sport-when { grid-area: when; flex-direction: row; flex-wrap: wrap; gap: 0 8px; font-size: 13px; color: var(--ink-soft); }
+  .sport-when small { font-size: 13px; }
+  .sport-when small::before { content: "·"; margin-right: 8px; }
   .sport-row .sport-arrow { grid-area: arrow; }
   .section-end > span { max-width: none; }
   .footer-right { flex-direction: column; align-items: flex-start; gap: 6px; }

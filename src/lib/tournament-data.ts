@@ -41,12 +41,17 @@ export const getPointsTable = createServerFn({ method: "GET" })
 export const getPublishedTournaments = createServerFn({ method: "GET" }).handler(async () => {
   const data = await loadSheetData();
   return {
-    tournaments: data.tournaments.map((t) => ({
-      slug: t.slug,
-      name: t.name,
-      sport: placeTournament(t)?.sport.name ?? t.sport,
-      dates: t.dates,
-    })),
+    tournaments: data.tournaments.map((t) => {
+      const place = placeTournament(t);
+      return {
+        slug: t.slug,
+        name: t.name,
+        sport: place?.sport.name ?? t.sport,
+        format: t.format,
+        dates: t.dates || place?.sport.date || "",
+        venue: t.venue || place?.sport.venue || "",
+      };
+    }),
   };
 });
 
