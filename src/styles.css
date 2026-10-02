@@ -286,3 +286,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
     linear-gradient(180deg, #1c4a30 0%, #123222 55%, #0c2418 100%);
   color: oklch(0.98 0.008 153);
 }
+
+/* Phones: a tournament row is the name with its sport and date beneath it,
+   so names stay on one line and the list reads at a glance. */
+@media (max-width: 760px) {
+  .sport-row { grid-template-columns: 30px minmax(0, 1fr) 22px; grid-template-areas: "num name arrow" "num meta arrow"; row-gap: 3px; min-height: 64px; padding: 10px 4px; }
+  .sport-row .sport-number { grid-area: num; }
+  .sport-row strong { grid-area: name; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sport-row .sport-meta { grid-area: meta; flex-direction: row; justify-content: flex-start; gap: 8px; font-size: 11px; color: var(--ink-soft); }
+  .sport-row .sport-meta .sport-date::before { content: "·"; margin-right: 8px; }
+  .sport-row .sport-date { min-width: 0; }
+  .sport-row .sport-arrow { grid-area: arrow; }
+  .section-end > span { max-width: none; }
+  .footer-right { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
