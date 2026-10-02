@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { houseRoster } from "@/data/event";
+import battleRoyaleLogo from "@/assets/battle-royale-logo.webp";
 import { SectionHeading, TournamentList } from "@/components/championship/Sections";
 import { getPublishedTournaments } from "@/lib/tournament-data";
 import { LIVE_REFRESH_MS, useAutoRefresh } from "@/hooks/use-auto-refresh";
@@ -21,14 +22,19 @@ function Home() {
   const { tournaments } = Route.useLoaderData();
   useAutoRefresh(LIVE_REFRESH_MS);
   return <main>
-    <section className="intro page-width">
-      <div className="intro-top"><span>BRIGHT MONEY PRESENTS</span></div>
-      <div className="intro-grid"><div className="intro-title"><h1><span>BRIGHT</span><span>BATTLE</span><span>ROYALE<span className="title-dot">.</span></span></h1></div><div className="intro-year"><span>THE CHAMPIONSHIP</span><strong>2026</strong></div></div>
-      <div className="intro-bottom"><p>FOUR HOUSES.<br/>ELEVEN SPORTS.<br/><em>ONE CHAMPION.</em></p><div><span>06 — 17 OCTOBER 2026</span><span>BRIGHT MONEY · INDIA</span></div></div>
+    {/* The hero banner: crest on the left, the promise beside it, the four houses down the right edge. */}
+    <section className="hero-banner">
+      <div className="page-width hero-inner">
+        <div className="hero-top"><span className="hero-presents">Bright Money presents</span><span className="hero-motto">Play / Compete / <b>Win</b></span></div>
+        <div className="hero-main">
+          <h1 className="sr-only">Bright Battle Royale 2026</h1>
+          <img src={battleRoyaleLogo} alt="" width={640} height={579} className="hero-logo"/>
+          <p className="hero-tagline">Four houses.<br/>Eleven sports.<br/><em>One champion.</em></p>
+          <ul className="hero-houses" aria-label="The four houses">{houseRoster.map((house) => <li key={house.id}><img src={house.logo} alt={house.name} title={house.name} width={96} height={96} loading="lazy"/></li>)}</ul>
+        </div>
+        <div className="hero-dates"><span>06 — 17 October 2026</span><span>Bright Money · India</span></div>
+      </div>
     </section>
-
-    {/* The four houses on the green band: label on the left, then the four crests. */}
-    <section className="bg-mint-light" aria-label="The four houses"><div className="page-width flex flex-col items-center gap-4 py-5 sm:flex-row sm:justify-center sm:gap-12 sm:py-8"><span className="eyebrow text-center">Four houses</span><div className="grid w-full max-w-xs grid-cols-4 gap-3 sm:flex sm:w-auto sm:max-w-none sm:gap-8 lg:gap-10">{houseRoster.map((house, i) => <img key={house.id} src={house.logo} alt={house.name} title={house.name} width={192} height={192} loading="lazy" className="house-crest aspect-square w-full rounded-xl object-cover sm:size-20 sm:rounded-2xl lg:size-24" style={{ animationDelay: `${i * 90}ms`, boxShadow: `0 0 0 1px color-mix(in oklab, ${house.color} 60%, transparent), 0 10px 28px -14px ${house.color}` }}/>)}</div></div></section>
 
     <section className="section games-section page-width" id="games"><SectionHeading title="Tournaments" intro="Live brackets, scores and podiums, updated the moment each result comes in."/>{tournaments.length ? <TournamentList tournaments={tournaments}/> : <p className="section-heading-intro">The first draws go up here as soon as they are published.</p>}</section>
 

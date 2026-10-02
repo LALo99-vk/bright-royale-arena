@@ -322,3 +322,52 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .house-crest { animation: crest-rise .55s cubic-bezier(.2, .8, .2, 1) backwards; transition: transform .25s ease; }
 .house-crest:hover, .house-crest:active { transform: translateY(-3px) rotate(-3deg); }
 @media (prefers-reduced-motion: reduce) { .house-crest { animation: none; transition: none; } .house-crest:hover, .house-crest:active { transform: none; } }
+
+/* The Battle Royale crest as the hero's title, the tagline beside it. */
+.intro-grid-logo { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: clamp(32px, 6vw, 96px); }
+.intro-hero-logo { display: block; width: clamp(260px, 34vw, 480px); height: auto; }
+.intro-tagline { font-family: var(--font-hero); font-size: clamp(32px, 4.4vw, 64px); font-weight: 800; line-height: .96; margin: 0; }
+.intro-tagline em { font-style: normal; color: var(--spot); }
+.intro-bottom-dates > div { margin-left: auto; }
+@media (max-width: 760px) {
+  .intro-grid-logo { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 18px; }
+  .intro-hero-logo { width: min(80vw, 340px); }
+  .intro-tagline { font-size: 30px; }
+  .intro-bottom-dates > div { margin: 0 auto; text-align: center; align-items: center; }
+}
+
+/* Hero banner (after the client's mock-up, simplified): white into mint, two
+   faint diagonal streaks, ink type with one green accent line. */
+.hero-banner { position: relative; overflow: hidden; border-bottom: 1px solid var(--border);
+  background:
+    linear-gradient(115deg, transparent 0 58%, rgb(76 199 100 / 0.10) 58% 64%, transparent 64%),
+    linear-gradient(115deg, transparent 0 70%, rgb(76 199 100 / 0.07) 70% 73%, transparent 73%),
+    linear-gradient(180deg, #ffffff 0%, var(--mint-light) 100%); }
+.hero-inner { display: flex; flex-direction: column; gap: clamp(16px, 2.5vw, 28px); padding-top: 22px; padding-bottom: 26px; }
+.hero-top { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+.hero-presents { display: inline-flex; align-items: center; gap: 12px; }
+.hero-presents::before { content: ""; width: 36px; height: 1px; background: currentColor; opacity: .6; }
+.hero-motto { color: var(--ink-soft); }
+.hero-motto b { color: var(--foreground); font-weight: 800; padding-bottom: 4px; box-shadow: inset 0 -2px var(--spot); }
+.hero-main { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(28px, 5vw, 80px); }
+.hero-logo { display: block; width: clamp(240px, 30vw, 440px); height: auto; }
+.hero-tagline { margin: 0; font-family: var(--font-hero); font-size: clamp(34px, 4.6vw, 68px); font-weight: 800; line-height: .98; text-transform: uppercase; }
+.hero-tagline em { display: inline-block; font-style: normal; color: var(--spot); transform: skewX(-9deg); padding-bottom: 10px;
+  background: linear-gradient(var(--spot), var(--spot)) left bottom / 82% 3px no-repeat; }
+.hero-houses { list-style: none; margin: 0; padding: 0 0 0 18px; display: flex; flex-direction: column; gap: 12px; border-left: 1px solid var(--border); }
+.hero-houses img { display: block; width: 48px; height: 48px; border-radius: 10px; object-fit: cover; transition: transform .25s ease; }
+.hero-houses img:hover { transform: translateX(-3px) rotate(-3deg); }
+.hero-dates { align-self: flex-end; display: flex; flex-direction: column; gap: 6px; text-align: right; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.hero-dates span:first-child { padding-bottom: 6px; background: linear-gradient(var(--spot), var(--spot)) right bottom / 40px 2px no-repeat; }
+@media (max-width: 760px) {
+  .hero-top { font-size: 10px; }
+  .hero-motto { display: none; }
+  .hero-main { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 18px; }
+  .hero-logo { width: min(78vw, 320px); }
+  .hero-tagline { font-size: 32px; }
+  .hero-tagline em { background-position: center bottom; }
+  .hero-houses { flex-direction: row; padding: 14px 0 0; border-left: 0; border-top: 1px solid var(--border); gap: 14px; }
+  .hero-houses img { width: 52px; height: 52px; }
+  .hero-dates { align-self: center; text-align: center; }
+  .hero-dates span:first-child { background-position: center bottom; }
+}
