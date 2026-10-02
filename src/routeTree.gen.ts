@@ -13,7 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuctionRouteImport } from './routes/auction'
 import { Route as PointsRouteImport } from './routes/points'
 import { Route as ScheduleRouteImport } from './routes/schedule'
-import { Route as SportsSlugRouteImport } from './routes/sports.$slug'
+import { Route as TournamentsSlugRouteImport } from './routes/tournaments.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,9 +35,9 @@ const ScheduleRoute = ScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SportsSlugRoute = SportsSlugRouteImport.update({
-  id: '/sports/$slug',
-  path: '/sports/$slug',
+const TournamentsSlugRoute = TournamentsSlugRouteImport.update({
+  id: '/tournaments/$slug',
+  path: '/tournaments/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -46,14 +46,14 @@ export interface FileRoutesByFullPath {
   '/auction': typeof AuctionRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
-  '/sports/$slug': typeof SportsSlugRoute
+  '/tournaments/$slug': typeof TournamentsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auction': typeof AuctionRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
-  '/sports/$slug': typeof SportsSlugRoute
+  '/tournaments/$slug': typeof TournamentsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +61,20 @@ export interface FileRoutesById {
   '/auction': typeof AuctionRoute
   '/points': typeof PointsRoute
   '/schedule': typeof ScheduleRoute
-  '/sports/$slug': typeof SportsSlugRoute
+  '/tournaments/$slug': typeof TournamentsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auction' | '/points' | '/schedule' | '/sports/$slug'
+  fullPaths: '/' | '/auction' | '/points' | '/schedule' | '/tournaments/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auction' | '/points' | '/schedule' | '/sports/$slug'
-  id: '__root__' | '/' | '/auction' | '/points' | '/schedule' | '/sports/$slug'
+  to: '/' | '/auction' | '/points' | '/schedule' | '/tournaments/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/auction'
+    | '/points'
+    | '/schedule'
+    | '/tournaments/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,7 +82,7 @@ export interface RootRouteChildren {
   AuctionRoute: typeof AuctionRoute
   PointsRoute: typeof PointsRoute
   ScheduleRoute: typeof ScheduleRoute
-  SportsSlugRoute: typeof SportsSlugRoute
+  TournamentsSlugRoute: typeof TournamentsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -109,11 +115,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ScheduleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sports/$slug': {
-      id: '/sports/$slug'
-      path: '/sports/$slug'
-      fullPath: '/sports/$slug'
-      preLoaderRoute: typeof SportsSlugRouteImport
+    '/tournaments/$slug': {
+      id: '/tournaments/$slug'
+      path: '/tournaments/$slug'
+      fullPath: '/tournaments/$slug'
+      preLoaderRoute: typeof TournamentsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -124,7 +130,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuctionRoute: AuctionRoute,
   PointsRoute: PointsRoute,
   ScheduleRoute: ScheduleRoute,
-  SportsSlugRoute: SportsSlugRoute,
+  TournamentsSlugRoute: TournamentsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
