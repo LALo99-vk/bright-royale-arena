@@ -30,7 +30,7 @@ export const auctionTeams: { name: string; captains: string[] }[] = [
     "name": "Savage Sharks",
     "captains": [
       "Ankur Varshney",
-      "Anusha Sg"
+      "Anusha SG"
     ]
   },
   {

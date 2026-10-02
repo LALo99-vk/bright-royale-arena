@@ -1,11 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
-import { houseRoster, scoring, type HouseId, type Medal } from "@/data/mockData";
+import { houseRoster, scoring, type HouseId, type Medal } from "@/data/event";
 import { buildSportPoints, buildStandings, EVENT_POOL, MEDALS, type EventPoints, type SportPoints, type Standing } from "@/lib/points";
+import { getPointsTable } from "@/lib/tournament-data";
+import { freshness } from "@/lib/freshness";
+import { RefreshButton } from "@/components/championship/RefreshButton";
+import { LIVE_REFRESH_MS, useAutoRefresh } from "@/hooks/use-auto-refresh";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/points")({
+  loader: () => getPointsTable({ data: { atLeast: freshness() } }),
   head: () => ({ meta: [
     { title: "Points Table | Bright Battle Royale 2026" }, { name: "description", content: "The overall standings for Bright Battle Royale 2026: every point scored by all four houses, across all eleven sports." },
     { property: "og:title", content: "Points Table | Bright Battle Royale 2026" }, { property: "og:description", content: "Live overall standings across every tournament of Bright Battle Royale 2026." },
@@ -17,7 +22,9 @@ const MEDAL_ICON: Record<Medal, string> = { gold: "🥇", silver: "🥈", bronze
 const MEDAL_LABEL: Record<Medal, string> = { gold: "Gold", silver: "Silver", bronze: "Bronze" };
 
 function PointsPage() {
-  const table = buildSportPoints();
+  const { points, eventSlugs, fetchedAt } = Route.useLoaderData();
+  useAutoRefresh(LIVE_REFRESH_MS);
+  const table = buildSportPoints(points);
   const standings = buildStandings(table);
   const leaderPoints = standings[0]?.total ?? 0;
   const awarded = table.reduce((sum, s) => sum + s.awarded, 0);
@@ -34,6 +41,7 @@ function PointsPage() {
           <p className="eyebrow flex items-center gap-3">Overall standings</p>
           <h1 className="mt-3 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Points table</h1>
           <p className="mt-3 max-w-md text-muted-foreground">Every event is worth {EVENT_POOL} points. Updated the moment each result comes in.</p>
+          <RefreshButton fetchedAt={fetchedAt} className="mt-4"/>
         </div>
         <div className="rounded-2xl bg-mint-light p-5 sm:p-6">
           <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
@@ -70,7 +78,7 @@ function PointsPage() {
           <h2 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">Sport by sport</h2>
           <p className="text-xs text-muted-foreground">Select a sport for its events</p>
         </div>
-        <BreakdownTable table={table} awarded={awarded}/>
+        <BreakdownTable table={table} awarded={awarded} eventSlugs={eventSlugs}/>
       </section>
 
       <HowPointsWork/>
@@ -168,7 +176,7 @@ function leadersOf(sport: SportPoints): Set<HouseId> {
   return new Set((Object.keys(sport.points) as HouseId[]).filter((id) => sport.points[id] === best));
 }
 
-function BreakdownTable({ table, awarded }: { table: SportPoints[]; awarded: number }) {
+function BreakdownTable({ table, awarded, eventSlugs }: { table: SportPoints[]; awarded: number; eventSlugs: Record<string, string> }) {
   const [open, setOpen] = useState<string[]>([]);
   const toggle = (slug: string) => setOpen((current) => current.includes(slug) ? current.filter((s) => s !== slug) : [...current, slug]);
   const totalFor = (id: HouseId) => table.reduce((sum, s) => sum + s.points[id], 0);
@@ -186,11 +194,11 @@ function BreakdownTable({ table, awarded }: { table: SportPoints[]; awarded: num
       </thead>
       {table.map((sport) => {
         const leaders = leadersOf(sport);
-        const expanded = open.includes(sport.slug);
-        return <tbody key={sport.slug}>
+        const expanded = open.includes(sport.name);
+        return <tbody key={sport.name}>
           <tr className={cn("border-b border-border", !expanded && "hover:bg-mint-light/50")}>
             <td className="py-4 pr-4">
-              <button type="button" onClick={() => toggle(sport.slug)} aria-expanded={expanded} className="flex items-center gap-2 text-left transition-colors hover:text-spot">
+              <button type="button" onClick={() => toggle(sport.name)} aria-expanded={expanded} className="flex items-center gap-2 text-left transition-colors hover:text-spot">
                 <ChevronRight className={cn("size-4 shrink-0 text-muted-foreground transition-transform", expanded && "rotate-90")} aria-hidden/>
                 <span><span className="block font-display text-base font-bold">{sport.name}</span><span className="block text-xs text-muted-foreground">{sport.events.length === 1 ? "1 event" : `${sport.events.length} events`}</span></span>
               </button>
@@ -201,7 +209,7 @@ function BreakdownTable({ table, awarded }: { table: SportPoints[]; awarded: num
             })}
             <td className="py-4 pl-6 text-right"><AwardedCell sport={sport}/></td>
           </tr>
-          {expanded && sport.events.map((event) => <EventRow key={event.name} event={event} slug={sport.slug}/>)}
+          {expanded && sport.events.map((event) => <EventRow key={event.name} event={event} slug={eventSlugs[event.name]}/>)}
         </tbody>;
       })}
       <tfoot>
@@ -223,9 +231,9 @@ function AwardedCell({ sport }: { sport: SportPoints }) {
   </span>;
 }
 
-function EventRow({ event, slug }: { event: EventPoints; slug: string }) {
+function EventRow({ event, slug }: { event: EventPoints; slug: string | undefined }) {
   return <tr className="border-b border-border/60 bg-mint-light/40">
-    <td className="py-3 pl-10 pr-4"><Link to="/sports/$slug" params={{ slug }} className="text-sm transition-colors hover:text-spot">{event.label}</Link></td>
+    <td className="py-3 pl-10 pr-4">{slug ? <Link to="/tournaments/$slug" params={{ slug }} className="text-sm transition-colors hover:text-spot">{event.label}</Link> : <span className="text-sm">{event.label}</span>}</td>
     <td colSpan={houseRoster.length} className="py-3 pl-4">
       {event.status === "pending" ? <span className="text-xs uppercase tracking-wider text-muted-foreground/60">Not played</span> :
         <span className="flex flex-wrap items-center gap-x-6 gap-y-2">

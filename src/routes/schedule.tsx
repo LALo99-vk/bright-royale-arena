@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { schedule } from "@/data/mockData";
+import { schedule } from "@/data/event";
 
 export const Route = createFileRoute("/schedule")({
   head: () => ({ meta: [

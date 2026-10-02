@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { auctionSales, auctionSetup, auctionTeams } from "@/data/auction";
-import { houseRoster } from "@/data/mockData";
+import { houseRoster } from "@/data/event";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/auction")({

@@ -1,3 +1,8 @@
+/**
+ * The fixed facts of Bright Battle Royale 2026: the houses, the scoring, the
+ * eleven sports and when they are played. Everything that changes during the
+ * event — draws, scores, medals — comes from the Google Sheet instead.
+ */
 import bullsLogo from "@/assets/houses/bulldozing-bulls.jpg";
 import wolvesLogo from "@/assets/houses/wildfire-wolves.jpg";
 import ravensLogo from "@/assets/houses/raging-ravens.jpg";
@@ -8,15 +13,15 @@ export const scoring = { gold: 25, silver: 15, bronze: 10, totalPossible: 800 } 
 export type HouseId = "a" | "b" | "c" | "d";
 export type Medal = "gold" | "silver" | "bronze";
 
-const unsortedHouses: { id: HouseId; name: string; code: string; color: string; points: number; medals: Record<Medal, number>; mark: string; logo: string }[] = [
-  { id: "a", name: "Bulldozing Bulls", code: "BB", color: "#E0393E", points: 245, medals: { gold: 4, silver: 2, bronze: 1 }, mark: "B", logo: bullsLogo },
-  { id: "b", name: "Wildfire Wolves", code: "WW", color: "#F07A1A", points: 221, medals: { gold: 3, silver: 3, bronze: 2 }, mark: "W", logo: wolvesLogo },
-  { id: "c", name: "Raging Ravens", code: "RR", color: "#E8B90C", points: 184, medals: { gold: 2, silver: 2, bronze: 3 }, mark: "R", logo: ravensLogo },
-  { id: "d", name: "Savage Sharks", code: "SS", color: "#1F8FD1", points: 150, medals: { gold: 1, silver: 2, bronze: 2 }, mark: "S", logo: sharksLogo },
+/** `code` is what the sheet's house columns resolve to (see `groups` in tournaments.ts). */
+export const houseRoster: { id: HouseId; name: string; code: string; color: string; logo: string }[] = [
+  { id: "a", name: "Bulldozing Bulls", code: "BB", color: "#E0393E", logo: bullsLogo },
+  { id: "b", name: "Wildfire Wolves", code: "WW", color: "#F07A1A", logo: wolvesLogo },
+  { id: "c", name: "Raging Ravens", code: "RR", color: "#E8B90C", logo: ravensLogo },
+  { id: "d", name: "Savage Sharks", code: "SS", color: "#1F8FD1", logo: sharksLogo },
 ];
-// Fixed display order for the house roster (houses above is sorted by points).
-export const houseRoster = [...unsortedHouses];
-export const houses = unsortedHouses.sort((a, b) => b.points - a.points || b.medals.gold - a.medals.gold || b.medals.silver - a.medals.silver || b.medals.bronze - a.medals.bronze);
+
+export const houseById = (id: HouseId) => houseRoster.find((house) => house.id === id)?.name ?? "TBC";
 
 export type Sport = { slug: string; name: string; date: string; venue: string; events: string[]; kind: "knockout" | "race" };
 export const sports: Sport[] = [
@@ -33,8 +38,6 @@ export const sports: Sport[] = [
   { slug: "tug-of-war", name: "Tug of War", date: "17 OCT", venue: "St. John's Ground", events: ["Final"], kind: "knockout" },
 ];
 
-export const venues = ["Bright Money Office", "St. John's Ground", "Venue to be confirmed"];
-
 export type ScheduleDay = { date: string; weekday: string; title: string; events: string[]; venue: string; time?: string; finale?: boolean; sportSlug?: string };
 export const schedule: ScheduleDay[] = [
   { date: "18 SEP", weekday: "FRI", title: "Auction Day", events: ["Squads drafted live"], venue: "Bright Money Office" },
@@ -49,32 +52,28 @@ export const schedule: ScheduleDay[] = [
   { date: "17 OCT", weekday: "SAT", title: "Championship Finale", events: ["Cricket", "Relay", "100m Sprint", "Tug of War"], venue: "St. John's Ground", finale: true, sportSlug: "cricket" },
 ];
 
-export const nextEvent = { sportSlug: "carrom", name: "Carrom Singles", startsAt: "2026-10-06T10:00:00+05:30", date: "06 OCT", venue: "Bright Money Office", time: "Time to be announced" };
+export type Rule = { section: string; text: string };
 
-export type Fixture = { id: string; event: string; round: string; home: HouseId; away: HouseId; date: string; status: "upcoming" | "completed"; homeScore?: number; awayScore?: number };
-export const fixtures: Record<string, Fixture[]> = Object.fromEntries(sports.map((sport) => [sport.slug, sport.events.flatMap((event, index) => [
-  { id: `${sport.slug}-${index}-1`, event, round: sport.kind === "race" ? "Heat 1" : "Semi-final 1", home: "a" as HouseId, away: "d" as HouseId, date: sport.date, status: "upcoming" as const },
-  { id: `${sport.slug}-${index}-2`, event, round: sport.kind === "race" ? "Heat 2" : "Semi-final 2", home: "b" as HouseId, away: "c" as HouseId, date: sport.date, status: "upcoming" as const },
-])])) as Record<string, Fixture[]>;
-
-export const brackets: Record<string, { round: string; matches: string[] }[]> = Object.fromEntries(sports.map((sport) => [sport.slug, sport.kind === "race" ? [
-  { round: "Heats", matches: ["Heat 1 · House A / House D", "Heat 2 · House B / House C"] },
-  { round: "Final", matches: ["Qualifiers to be decided"] },
-] : [
-  { round: "Semi-finals", matches: ["House A vs House D", "House B vs House C"] },
-  { round: "Final", matches: ["Winners to be decided"] },
-]]));
-
-export type Result = { sportSlug: string; event: string; date: string; podium: { gold: HouseId; silver: HouseId; bronze: HouseId } };
-export const results: Result[] = [
-  { sportSlug: "carrom", event: "Carrom Singles", date: "06 OCT", podium: { gold: "a", silver: "c", bronze: "b" } },
-  { sportSlug: "table-tennis", event: "Table Tennis Singles", date: "08 OCT", podium: { gold: "b", silver: "a", bronze: "d" } },
-  { sportSlug: "chess", event: "Chess", date: "13 OCT", podium: { gold: "a", silver: "b", bronze: "c" } },
-];
-
-export const players: { house: HouseId; name: string }[] = [
-  { house: "a", name: "House A representative" }, { house: "b", name: "House B representative" },
-  { house: "c", name: "House C representative" }, { house: "d", name: "House D representative" },
-];
-
-export const houseById = (id: HouseId) => houses.find((house) => house.id === id)?.name ?? "TBC";
+/**
+ * House rules per sport, summarised from the organisers' rulebook
+ * ("Rules and Game Format — Carrom & Table Tennis"). Shown on every tournament
+ * page of that sport; a sport with no entry shows no rules section at all.
+ * `doubles` rules are added only on a doubles draw.
+ */
+export const sportRules: Record<string, { all: Rule[]; doubles?: Rule[] }> = {
+  carrom: {
+    all: [
+      { section: "Match format", text: "Every match is two games. The player or team with the higher combined score across both games wins." },
+      { section: "Scoring", text: "Each black or white coin is worth 1 point. The Queen is worth 3, once it is covered. Points from both games are added together." },
+      { section: "Covering the Queen", text: "Pocket one of your own coins on the very next strike to cover the Queen. If you don't, the Queen goes back to the centre." },
+      { section: "Pocketing the Queen early", text: "Pocketing the Queen before your first coin ends your turn and puts the Queen back in the centre circle. No coin is taken off you as a penalty." },
+      { section: "Thumb shots", text: "Thumb strikes are not allowed; one counts as a foul." },
+      { section: "Fouls", text: "A foul returns one of your pocketed coins to the board. Fouls: pocketing the striker, placing the striker wrongly, handling or moving the striker between turns, and — when both sides have one coin left and the Queen is still on the board — hitting your opponent's last coin directly." },
+      { section: "Time limit & tie-breaker", text: "Each match has a 15-minute limit. If the combined scores are level when time runs out, a single tie-breaker board is played straight away, and whoever wins it wins the match." },
+      { section: "Conduct", text: "Arrive 10 minutes before your match. Misconduct or unsportsmanlike behaviour can lead to disqualification." },
+    ],
+    doubles: [
+      { section: "Doubles", text: "Two players per team, striking alternately." },
+    ],
+  },
+};
