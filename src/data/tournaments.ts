@@ -50,7 +50,7 @@ export type EventMedal = {
   winners?: string[] | undefined;
 };
 
-/** One of the 16 medal events — the unit points are awarded in. */
+/** One of the 21 medal events — the unit points are awarded in. */
 export type EventResult = {
   /** Sport as written in the sheet, e.g. "Table Tennis". */
   sport: string;
@@ -73,7 +73,7 @@ export type SportPoints = {
   /** Points per house, keyed by group code. Summed from the events. */
   points: Record<string, number>;
   awarded: number;
-  /** 50 per event: 200 for badminton, 100 for TT and carrom, 50 for the rest. */
+  /** 50 per event: 200 for badminton and carrom, 150 for TT, 100 for relay and 100m, 50 for the rest. */
   pool: number;
   status: ScoringStatus;
 };
@@ -90,7 +90,7 @@ export type PointsTable = {
   /** Medal counts per house, keyed by group code. */
   medals: Record<string, MedalCount>;
   awarded: number;
-  /** Everything in play: 800. */
+  /** Everything in play: 1050. */
   pool: number;
   /** Events with all three medals decided. */
   eventsDecided: number;

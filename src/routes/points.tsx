@@ -258,7 +258,7 @@ function HowPointsWork() {
   return <section className="mt-16 border-t border-border pt-10 sm:mt-20">
     <h2 className="font-display text-lg font-extrabold tracking-tight">How points work</h2>
     <div className="mt-5 grid gap-x-10 gap-y-4 text-sm text-muted-foreground sm:grid-cols-3">
-      <p><span className="font-semibold text-foreground">Every event is worth {EVENT_POOL} points</span>, {scoring.totalPossible} in total across 16 medal events. Badminton has four events, table tennis and carrom two each, and every other sport one.</p>
+      <p><span className="font-semibold text-foreground">Every event is worth {EVENT_POOL} points</span>, {scoring.totalPossible} in total across 21 medal events. Badminton and carrom have four events, table tennis three, relay and the 100m two each (men's and women's), and every other sport one.</p>
       <p><span className="font-semibold text-foreground">Gold {scoring.gold}, silver {scoring.silver}, bronze {scoring.bronze}</span> in every event, whatever the sport or squad size. Chess counts as much as cricket.</p>
       <p><span className="font-semibold text-foreground">Points go to the house</span>, never the individual. Level on points is settled by gold medals, then silver, then bronze.</p>
     </div>

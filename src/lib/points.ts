@@ -2,7 +2,7 @@
  * The points page's view of the standings.
  *
  * The sheet's Results tab is the source of truth (see `lib/sheets/points.ts`);
- * this lays its events over the sport catalogue in `data/event.ts`, so all 16
+ * this lays its events over the sport catalogue in `data/event.ts`, so all 21
  * medal events are listed — the ones not played yet as pending — in the order
  * the site shows the sports.
  *

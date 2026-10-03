@@ -1,7 +1,7 @@
 /**
  * The house points table.
  *
- * Two tabs matter. `Results` is where the business team works: 16 rows, one per
+ * Two tabs matter. `Results` is where the business team works: 21 rows, one per
  * medal event, each naming the houses that took gold, silver and bronze. `LeaderBoard`
  * is a rollup the sheet calculates for itself.
  *
@@ -51,7 +51,7 @@ export const POINTS_TAB_NAMES = [...RESULTS_TAB_NAMES, ...LEADERBOARD_TAB_NAMES]
  * event, not per sport as at InMobi: badminton's four events are worth 200.
  */
 const EXPECTED_EVENT_POOL = 50;
-const EXPECTED_TOTAL_POOL = 800;
+const EXPECTED_TOTAL_POOL = 1050;
 
 export const norm = (value: string) => (value ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
@@ -468,7 +468,7 @@ export function reconcile(
     add(`Medal counts add up to ${medalSum} but ${decidedMedals} medals have been given out.`);
   }
 
-  // 3. The scoring system itself: 50 an event, 800 in total.
+  // 3. The scoring system itself: 50 an event, 1050 in total.
   for (const sport of table.sports) {
     for (const event of sport.events) {
       if (event.pool !== EXPECTED_EVENT_POOL) {

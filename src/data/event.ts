@@ -8,7 +8,7 @@ import wolvesLogo from "@/assets/houses/wildfire-wolves.jpg";
 import ravensLogo from "@/assets/houses/raging-ravens.jpg";
 import sharksLogo from "@/assets/houses/savage-sharks.jpg";
 
-export const scoring = { gold: 25, silver: 15, bronze: 10, totalPossible: 800 } as const;
+export const scoring = { gold: 25, silver: 15, bronze: 10, totalPossible: 1050 } as const;
 
 export type HouseId = "a" | "b" | "c" | "d";
 export type Medal = "gold" | "silver" | "bronze";
@@ -28,28 +28,28 @@ export const sports: Sport[] = [
   { slug: "cricket", name: "Cricket", date: "17 OCT", venue: "St. John's Ground", events: ["Final"], kind: "knockout" },
   { slug: "football", name: "Football", date: "10 OCT", venue: "Venue to be confirmed", events: ["Final"], kind: "knockout" },
   { slug: "badminton", name: "Badminton", date: "10 OCT", venue: "Venue to be confirmed", events: ["Men's Singles", "Women's Singles", "Men's Doubles", "Mixed Doubles"], kind: "knockout" },
-  { slug: "table-tennis", name: "Table Tennis", date: "08—09 OCT", venue: "Bright Money Office", events: ["Singles", "Doubles"], kind: "knockout" },
-  { slug: "carrom", name: "Carrom", date: "06—07 OCT", venue: "Bright Money Office", events: ["Singles", "Doubles"], kind: "knockout" },
+  { slug: "table-tennis", name: "Table Tennis", date: "08—09 OCT", venue: "Bright Money Office", events: ["Men's Singles", "Women's Singles", "Men's Doubles"], kind: "knockout" },
+  { slug: "carrom", name: "Carrom", date: "06—07 OCT", venue: "Bright Money Office", events: ["Men's Singles", "Women's Singles", "Men's Doubles", "Women's Doubles"], kind: "knockout" },
   { slug: "chess", name: "Chess", date: "13 OCT", venue: "Bright Money Office", events: ["Final"], kind: "knockout" },
   { slug: "foosball", name: "Foosball", date: "14 OCT", venue: "Bright Money Office", events: ["Final"], kind: "knockout" },
   { slug: "darts", name: "Darts", date: "15 OCT", venue: "Bright Money Office", events: ["Final"], kind: "knockout" },
-  { slug: "relay", name: "Relay", date: "17 OCT", venue: "St. John's Ground", events: ["Final"], kind: "race" },
-  { slug: "100m-sprint", name: "100m Sprint", date: "17 OCT", venue: "St. John's Ground", events: ["Heats", "Final"], kind: "race" },
-  { slug: "tug-of-war", name: "Tug of War", date: "17 OCT", venue: "St. John's Ground", events: ["Final"], kind: "knockout" },
+  { slug: "relay", name: "Relay", date: "17 OCT", venue: "St. John's Ground", events: ["Men's", "Women's"], kind: "race" },
+  { slug: "100m-sprint", name: "100m Sprint", date: "17 OCT", venue: "St. John's Ground", events: ["Men's", "Women's"], kind: "race" },
+  { slug: "tug-of-war", name: "Tug of War", date: "10 OCT", venue: "Venue to be confirmed", events: ["Final"], kind: "knockout" },
 ];
 
 export type ScheduleDay = { date: string; weekday: string; title: string; events: string[]; venue: string; time?: string; finale?: boolean; sportSlug?: string };
 export const schedule: ScheduleDay[] = [
   { date: "18 SEP", weekday: "FRI", title: "Auction Day", events: ["Squads drafted live"], venue: "Bright Money Office" },
-  { date: "06 OCT", weekday: "TUE", title: "Carrom Singles", events: ["Carrom Singles"], venue: "Bright Money Office", sportSlug: "carrom" },
-  { date: "07 OCT", weekday: "WED", title: "Carrom Doubles", events: ["Carrom Doubles"], venue: "Bright Money Office", sportSlug: "carrom" },
-  { date: "08 OCT", weekday: "THU", title: "Table Tennis Singles", events: ["Table Tennis Singles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
-  { date: "09 OCT", weekday: "FRI", title: "Table Tennis Doubles", events: ["Table Tennis Doubles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
-  { date: "10 OCT", weekday: "SAT", title: "Football & Badminton", events: ["Football", "Badminton"], venue: "Venue to be confirmed", sportSlug: "football" },
+  { date: "06 OCT", weekday: "TUE", title: "Carrom Singles", events: ["Carrom Men's Singles", "Carrom Women's Singles"], venue: "Bright Money Office", sportSlug: "carrom" },
+  { date: "07 OCT", weekday: "WED", title: "Carrom Doubles", events: ["Carrom Men's Doubles", "Carrom Women's Doubles"], venue: "Bright Money Office", sportSlug: "carrom" },
+  { date: "08 OCT", weekday: "THU", title: "Table Tennis Singles", events: ["Table Tennis Men's Singles", "Table Tennis Women's Singles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
+  { date: "09 OCT", weekday: "FRI", title: "Table Tennis Doubles", events: ["Table Tennis Men's Doubles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
+  { date: "10 OCT", weekday: "SAT", title: "Football, Badminton & Tug of War", events: ["Football", "Badminton", "Tug of War"], venue: "Venue to be confirmed", sportSlug: "football" },
   { date: "13 OCT", weekday: "TUE", title: "Chess", events: ["Chess"], venue: "Bright Money Office", sportSlug: "chess" },
   { date: "14 OCT", weekday: "WED", title: "Foosball", events: ["Foosball"], venue: "Bright Money Office", sportSlug: "foosball" },
   { date: "15 OCT", weekday: "THU", title: "Darts", events: ["Darts"], venue: "Bright Money Office", sportSlug: "darts" },
-  { date: "17 OCT", weekday: "SAT", title: "Championship Finale", events: ["Cricket", "Relay", "100m Sprint", "Tug of War"], venue: "St. John's Ground", finale: true, sportSlug: "cricket" },
+  { date: "17 OCT", weekday: "SAT", title: "Championship Finale", events: ["Cricket", "Relay", "100m Sprint"], venue: "St. John's Ground", finale: true, sportSlug: "cricket" },
 ];
 
 export type Rule = { section: string; text: string };

@@ -355,7 +355,7 @@ export function buildFromTabs(
 /**
  * Builds the standings from the sheet.
  *
- * `Results` is the source of truth: 16 event rows naming who took each medal.
+ * `Results` is the source of truth: 21 event rows naming who took each medal.
  * Every sum on the page is computed from those rows, never read off the
  * sheet's own totals. `LeaderBoard` is read afterwards only to check our
  * arithmetic against theirs, and to borrow the order it lists the sports in.

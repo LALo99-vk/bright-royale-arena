@@ -42,7 +42,7 @@ function TournamentPage() {
       {tab === "Details" && <div className="sport-details">
         <div>
           <h2 className="panel-heading">About the tournament</h2>
-          <p className="sport-about">{t.about || `${t.name} is one of sixteen medal events at Bright Battle Royale 2026. All four houses compete, and the podium is worth 50 points to the house table.`}</p>
+          <p className="sport-about">{t.about || `${t.name} is one of twenty-one medal events at Bright Battle Royale 2026. All four houses compete, and the podium is worth 50 points to the house table.`}</p>
           <dl className="sport-info">
             <div><dt>Format</dt><dd>{t.format || (isRace ? "Heats to a final" : "Knockout")}</dd></div>
             <div><dt>Field</dt><dd>{t.teams || "All four houses"}</dd></div>
