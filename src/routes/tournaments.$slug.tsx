@@ -69,17 +69,17 @@ function TournamentPage() {
         : t.rounds.length ? <Bracket rounds={t.rounds} kind={t.participants} courtLabel={t.courtLabel ?? "Board"} title={t.name}/>
         : <EmptyState icon={<Trophy size={25}/>} title="The draw is on its way" body="The bracket appears here once the draw is made."/>)}
 
-      {tab === "Gallery" && (t.gallery.length ? <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{t.gallery.map((g, i) => <figure key={g.src} className={i === 0 ? "overflow-hidden sm:col-span-2 sm:row-span-2" : "overflow-hidden"}><img src={g.src} alt="" loading="lazy" width={1280} height={960} className={i === 0 ? "h-72 w-full object-cover sm:h-[33rem]" : "h-56 w-full object-cover"}/></figure>)}</div>
-        : <EmptyState icon={<Camera size={25}/>} title="Photos are on their way" body="Check back after game day."/>)}
-      {tab === "Videos" && (t.videos.length ? <div className="grid grid-cols-2 items-start gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">{t.videos.map(v => <VideoCard key={v.id} video={v}/>)}</div>
-        : <EmptyState icon={<Play size={25}/>} title="Videos are on their way" body="Check back after game day."/>)}
+      {tab === "Gallery" && <section><h2 className="rule-spot font-display text-2xl font-extrabold sm:text-3xl">Gallery</h2><div className="mt-10">{t.gallery.length ? <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{t.gallery.map((g, i) => <figure key={g.src} className={i === 0 ? "overflow-hidden sm:col-span-2 sm:row-span-2" : "overflow-hidden"}><img src={g.src} alt="" loading="lazy" width={1280} height={960} className={i === 0 ? "h-72 w-full object-cover sm:h-[33rem]" : "h-56 w-full object-cover"}/></figure>)}</div>
+        : <EmptyState icon={<Camera size={25}/>} title="Photos are on their way" body="Check back after game day."/>}</div></section>}
+      {tab === "Videos" && <section><h2 className="rule-spot font-display text-2xl font-extrabold sm:text-3xl">Videos</h2><div className="mt-10">{t.videos.length ? <div className="grid grid-cols-2 items-start gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">{t.videos.map(v => <VideoCard key={v.id} video={v}/>)}</div>
+        : <EmptyState icon={<Play size={25}/>} title="Videos are on their way" body="Check back after game day."/>}</div></section>}
 
       {tab === "Winners" && <section>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h2 className="rule-spot font-display text-2xl font-extrabold sm:text-3xl">Winners</h2>
           <Link to="/points" className="text-xs text-muted-foreground transition-colors hover:text-spot">See the full standings</Link>
         </div>
-        <div className="mt-10">{winners ? <EventWinners sport={winners} teams={teams}/> : <NothingDecided sport={t.name}/>}</div>
+        <div className="mt-10">{winners ? <EventWinners sport={winners} teams={teams} name={t.name}/> : <NothingDecided sport={t.name}/>}</div>
       </section>}
     </section>
 

@@ -9,7 +9,7 @@ export function SiteHeader() {
   const path = useRouterState({ select: (state) => state.location.pathname });
   const links = [
     { to: "/" as const, hash: "games", label: "Tournaments" },
-    { to: "/points" as const, label: "Points" },
+    { to: "/points" as const, label: "Points Table" },
     { to: "/schedule" as const, label: "Schedule" },
     { to: "/auction" as const, label: "Auction" },
   ];
@@ -24,5 +24,5 @@ export function SiteHeader() {
 }
 
 export function SiteFooter() {
-  return <footer className="site-footer"><div className="page-width footer-inner"><div><img src={brightLogo} alt="Bright" className="footer-logo" width={600} height={134}/><p>Four houses. One finish line.</p></div><div className="footer-right"><span>BRIGHT BATTLE ROYALE · 2026</span><span>MADE FOR THE GAME</span></div></div></footer>;
+  return <footer className="site-footer"><div className="page-width footer-inner"><div><img src={brightLogo} alt="Bright" className="footer-logo" width={600} height={134}/><p>Four houses. One finish line.</p></div><div className="footer-right"><span>BRIGHT BATTLE ROYALE · 2026</span></div></div></footer>;
 }

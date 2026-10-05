@@ -90,7 +90,7 @@ function AuctionPage() {
       <section className="mt-14 sm:mt-16">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="font-display text-xl font-extrabold tracking-tight sm:text-2xl">Top buys</h2>
-          <p className="text-sm text-muted-foreground">The five biggest bids of the day</p>
+          <p className="text-sm text-muted-foreground">The highest prices paid on auction day</p>
         </div>
         <ol className="mt-4 border-t border-border">
           {top.slice(0, 5).map((sale, i) => <li key={sale.n} className="grid grid-cols-[1.75rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-border py-2.5 text-sm sm:grid-cols-[2rem_minmax(0,1fr)_minmax(0,1fr)_6rem]">

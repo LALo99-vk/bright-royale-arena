@@ -42,7 +42,7 @@ function winnerName(medal: EventMedal, team: Group): string {
   return names.length ? names.join(" & ") : team.name;
 }
 
-export function EventWinners({ sport, teams }: { sport: SportPoints; teams: Group[] }) {
+export function EventWinners({ sport, teams, name }: { sport: SportPoints; teams: Group[]; name?: string }) {
   const events = sport.events.filter(hasResult);
 
   const [categoryName, setCategoryName] = useState<string | null>(null);
@@ -55,7 +55,7 @@ export function EventWinners({ sport, teams }: { sport: SportPoints; teams: Grou
   // below it, so the handles are held here, where both can reach them.
   const discs = useRef(new Map<Medal, SVGSVGElement | null>());
 
-  if (!event) return <NothingDecided sport={sport.sport} />;
+  if (!event) return <NothingDecided sport={name ?? sport.sport} />;
 
   return (
     <div>
@@ -402,11 +402,10 @@ function SaveMedal({
 
 export function NothingDecided({ sport }: { sport?: string }) {
   return (
-    <div className="border-y border-border py-20 text-center">
+    <div className="rounded-md bg-muted px-5 py-24 text-center">
       <p className="font-display text-xl font-extrabold">No medals yet</p>
       <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-        {sport ? `${sport} hasn't been decided yet.` : "Nothing has been decided yet."} The podium
-        fills in as soon as the results come in.
+        {sport ? `${sport} hasn't been decided yet.` : "Nothing has been decided yet."}
       </p>
     </div>
   );
