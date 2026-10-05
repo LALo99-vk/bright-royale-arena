@@ -371,3 +371,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .hero-dates { align-self: center; text-align: center; }
   .hero-dates span:first-child { background-position: center bottom; }
 }
+/* Men's / Women's switch on a shared tournament page. */
+.side-switch { display: inline-flex; gap: 4px; margin-top: 22px; padding: 4px; border: 1px solid color-mix(in oklab, white 28%, transparent); border-radius: 999px; }
+.side-switch button { min-height: 40px; padding: 0 20px; border-radius: 999px; font-family: var(--font-display); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: color-mix(in oklab, white 72%, transparent); transition: background-color .2s, color .2s; }
+.side-switch button:hover { color: white; }
+.side-switch button[aria-pressed="true"] { background: var(--spot); color: var(--foreground); }
+@media (max-width: 760px) { .side-switch { margin-top: 16px; } .side-switch button { padding: 0 16px; font-size: 12px; } }

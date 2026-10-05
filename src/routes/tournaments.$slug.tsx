@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowUpRight, Camera, Play, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,15 +10,20 @@ import { getTournamentPage } from "@/lib/tournament-data";
 import { freshness } from "@/lib/freshness";
 import { RefreshButton } from "@/components/championship/RefreshButton";
 import { LIVE_REFRESH_MS, useAutoRefresh } from "@/hooks/use-auto-refresh";
+import { sideKey } from "@/lib/event-groups";
 
 export const Route = createFileRoute("/tournaments/$slug")({
+  // ?side=womens opens a shared page on its women's draw. Not a loader dep, so
+  // flipping the switch never refetches the page.
+  validateSearch: (search: Record<string, unknown>): { side?: string } =>
+    typeof search["side"] === "string" ? { side: search["side"] } : {},
   loader: async ({ params }) => {
     const data = await getTournamentPage({ data: { slug: params.slug, atLeast: freshness() } });
     // Not on the Tournaments tab, or still marked hidden there.
     if (!data) throw notFound();
     return data;
   },
-  head: ({ loaderData }) => { const name = loaderData?.tournament.name ?? "Tournament"; return { meta: [
+  head: ({ loaderData }) => { const name = loaderData?.name ?? "Tournament"; return { meta: [
     { title: `${name} | Bright Battle Royale 2026` }, { name: "description", content: `Follow ${name} fixtures, the live bracket, results and podium at Bright Battle Royale 2026.` },
     { property: "og:title", content: `${name} | Bright Battle Royale 2026` }, { property: "og:description", content: `${name} fixtures, bracket, results and podium.` },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
@@ -29,12 +34,21 @@ const TABS = ["Details", "Matches", "Gallery", "Videos", "Winners"] as const;
 type Tab = (typeof TABS)[number];
 
 function TournamentPage() {
-  const { tournament: t, sport, winners, teams, rules, fetchedAt } = Route.useLoaderData();
+  const { name, sides, active, teams, fetchedAt } = Route.useLoaderData();
+  const { side } = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
   useAutoRefresh(LIVE_REFRESH_MS);
   const [tab, setTab] = useState<Tab>("Details");
+  const picked = sides.findIndex((s) => s.side && sideKey(s.side) === side);
+  const current = picked >= 0 ? picked : active;
+  const view = sides[current] ?? sides[0];
+  if (!view) return null;
+  const { tournament: t, sport, winners, rules } = view;
   const isRace = Boolean(t.race?.length) || sport?.kind === "race";
   return <main>
-    <section className="sport-intro"><div className="page-width sport-intro-grid"><div className="sport-intro-copy"><Link to="/" hash="games" className="back-link"><ArrowLeft size={17}/> ALL TOURNAMENTS</Link><div className="eyebrow light">THE GAMES / 2026</div><h1>{t.name}<span>.</span></h1></div></div></section>
+    <section className="sport-intro"><div className="page-width sport-intro-grid"><div className="sport-intro-copy"><Link to="/" hash="games" className="back-link"><ArrowLeft size={17}/> ALL TOURNAMENTS</Link><div className="eyebrow light">THE GAMES / 2026</div><h1>{name}<span>.</span></h1>
+      {sides.length > 1 && <div className="side-switch" role="group" aria-label="Choose a draw">{sides.map((s, i) => <button key={s.tournament.slug} type="button" aria-pressed={i === current} onClick={() => navigate({ search: { side: sideKey(s.side ?? "") }, replace: true, resetScroll: false })}>{s.side}</button>)}</div>}
+    </div></div></section>
 
     <div className="sport-tabs-bar"><div className="page-width view-tabs" role="tablist" aria-label="Tournament sections">{TABS.map(item => <Button key={item} variant="ghost" role="tab" aria-selected={tab === item} className={tab === item ? "view-tab active" : "view-tab"} onClick={() => setTab(item)}>{item}</Button>)}<RefreshButton fetchedAt={fetchedAt} className="ml-auto pl-4"/></div></div>
 

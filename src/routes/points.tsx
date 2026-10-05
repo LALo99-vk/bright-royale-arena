@@ -111,7 +111,7 @@ function HouseCard({ entry, leaderPoints, started }: { entry: Standing; leaderPo
     <article className={cn("relative flex items-center gap-4 rounded-xl border border-border bg-card px-4 py-3.5 transition-colors", "sm:flex-col sm:items-stretch sm:gap-0 sm:p-6", isLeader && "border-spot/60 bg-mint-light/60")}>
       <span className="absolute inset-x-0 top-0 h-1 rounded-t-xl" style={{ backgroundColor: entry.house.color }} aria-hidden/>
       <span className="w-6 shrink-0 font-display text-sm font-bold tabular-nums text-muted-foreground/70 sm:hidden">{started ? `#${entry.rank}` : "—"}</span>
-      <img src={entry.house.logo} alt="" className="size-11 shrink-0 rounded-lg object-cover sm:order-2 sm:mt-4 sm:size-16 sm:self-start" width={64} height={64}/>
+      <img src={entry.house.logo} alt="" className="size-13 shrink-0 rounded-lg border border-border object-cover sm:order-2 sm:mt-4 sm:size-20 sm:self-start" width={80} height={80}/>
       <div className="hidden items-start justify-between gap-3 sm:order-1 sm:flex">
         <span className="font-display text-sm font-bold tabular-nums text-muted-foreground/70">{started ? `#${entry.rank}` : "—"}</span>
         {isLeader && <span className="eyebrow text-[0.62rem] text-spot">Leading</span>}
