@@ -41,7 +41,7 @@ export const sports: Sport[] = [
 export type ScheduleDay = { date: string; weekday: string; title: string; events: string[]; venue: string; time?: string; finale?: boolean; sportSlug?: string };
 export const schedule: ScheduleDay[] = [
   { date: "18 SEP", weekday: "FRI", title: "Auction Day", events: ["Squads drafted live"], venue: "Bright Money Office" },
-  { date: "06 OCT", weekday: "TUE", title: "Carrom Singles", events: ["Carrom Men's Singles", "Carrom Women's Singles"], venue: "Bright Money Office", sportSlug: "carrom" },
+  { date: "06 OCT", weekday: "TUE", title: "Carrom Singles", events: ["Carrom Men's Singles", "Carrom Women's Singles"], venue: "Bright Money Office", time: "4:00 PM – 6:30 PM", sportSlug: "carrom" },
   { date: "07 OCT", weekday: "WED", title: "Carrom Doubles", events: ["Carrom Men's Doubles", "Carrom Women's Doubles"], venue: "Bright Money Office", sportSlug: "carrom" },
   { date: "08 OCT", weekday: "THU", title: "Table Tennis Singles", events: ["Table Tennis Men's Singles", "Table Tennis Women's Singles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
   { date: "09 OCT", weekday: "FRI", title: "Table Tennis Doubles", events: ["Table Tennis Men's Doubles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
