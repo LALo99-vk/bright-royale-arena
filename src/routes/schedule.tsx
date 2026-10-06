@@ -20,7 +20,7 @@ function SchedulePage() {
     </section>
     <section className="section page-width">
       <div className="event-schedule">{schedule.filter(day => day.sportSlug).map(day => <div className="event-schedule-row" key={day.date}><div className="event-schedule-date"><strong>{day.date}</strong><span>{day.weekday}</span></div><strong className="event-schedule-sports">{day.events.join(" · ")}</strong><span>{day.time ?? "Time to be announced"}</span><span>{day.venue}</span></div>)}</div>
-      <div className="section-end"><span>DETAILED SCHEDULES FOR EACH SPORT ARE ON THE SPORT PAGES</span></div>
+      <div className="section-end"><span>DETAILED SCHEDULES FOR EACH SPORT ARE IN THE TOURNAMENTS SECTION</span></div>
     </section>
   </main>;
 }
