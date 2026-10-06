@@ -66,7 +66,7 @@ export const sportRules: Record<string, { all: Rule[]; doubles?: Rule[] }> = {
       { section: "Match format", text: "Every match is two games. The player or team with the higher combined score across both games wins." },
       { section: "Scoring", text: "Each black or white coin is worth 1 point. The Queen is worth 3, once it is covered. Points from both games are added together." },
       { section: "Covering the Queen", text: "Pocket one of your own coins on the very next strike to cover the Queen. If you don't, the Queen goes back to the centre." },
-      { section: "Pocketing the Queen early", text: "Pocketing the Queen before your first coin ends your turn and puts the Queen back in the centre circle. No coin is taken off you as a penalty." },
+      { section: "Pocketing the Queen early", text: "Pocketing the Queen before your first coin ends your turn and puts the Queen back in the centre circle. No additional coin is removed from the board as a penalty." },
       { section: "Thumb shots", text: "Thumb strikes are not allowed; one counts as a foul." },
       { section: "Fouls", text: "A foul returns one of your pocketed coins to the board. Fouls: pocketing the striker, placing the striker wrongly, handling or moving the striker between turns, and — when both sides have one coin left and the Queen is still on the board — hitting your opponent's last coin directly." },
       { section: "Time limit & tie-breaker", text: "Each match has a 15-minute limit. If the combined scores are level when time runs out, a single tie-breaker board is played straight away, and whoever wins it wins the match." },
