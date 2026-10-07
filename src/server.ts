@@ -1,6 +1,6 @@
 import "./lib/error-capture";
 
-import { fetchFileMedia, fetchFileThumbnail, readDriveConfig } from "./lib/drive";
+import { fetchFileMedia, fetchFileThumbnail, loadPhoto, readDriveConfig } from "./lib/drive";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { loadSheetData } from "./lib/sheets";
@@ -131,8 +131,8 @@ async function handleApi(request: Request): Promise<Response | null> {
     if (!config) return json({ error: "Drive not configured" }, "no-store", 404);
 
     try {
-      const { body, contentType } = await fetchFileMedia(config, fileId);
-      return new Response(body, {
+      const { bytes, contentType } = await loadPhoto(fileId);
+      return new Response(bytes, {
         status: 200,
         headers: {
           "content-type": contentType,
@@ -140,6 +140,18 @@ async function handleApi(request: Request): Promise<Response | null> {
           // to cache hard — a CDN can serve it without hitting Drive again.
           "cache-control": "public, max-age=31536000, immutable",
         },
+      });
+    } catch {
+      // No tile-sized copy yet — Drive is most likely still processing a fresh
+      // upload. Send the original, but only briefly, so the browser picks up
+      // the small one once it exists.
+    }
+
+    try {
+      const { body, contentType } = await fetchFileMedia(config, fileId);
+      return new Response(body, {
+        status: 200,
+        headers: { "content-type": contentType, "cache-control": "public, max-age=300" },
       });
     } catch (error) {
       console.error("[drive] image proxy failed:", error);

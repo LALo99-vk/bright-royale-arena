@@ -146,12 +146,94 @@ function split(files: DriveFile[]): FolderMedia {
   return { gallery, videos };
 }
 
+/* ------------------------------------------------------------------ *
+ * Photos: resized once, then served from memory
+ * ------------------------------------------------------------------ */
+
+/**
+ * Wide enough for a gallery tile on a high-density screen. Phone originals are
+ * 1-1.5 MB and took 7-12 s each to come through Drive; at this width Drive hands
+ * back roughly a fifth of that.
+ */
+const PHOTO_WIDTH = 1000;
+
+/** The task has 1 GB; at ~250 KB a photo this still holds a few hundred. */
+const PHOTO_CACHE_BYTES = 80 * 1024 * 1024;
+
+/** Concurrent Drive fetches when warming a folder, so a big drop can't flood it. */
+const WARM_CONCURRENCY = 4;
+
+export type Photo = { bytes: ArrayBuffer; contentType: string };
+
+// Map order doubles as recency: a hit is moved to the end, eviction takes the front.
+const photoCache = new Map<string, Photo>();
+let photoCacheBytes = 0;
+const photoInFlight = new Map<string, Promise<Photo>>();
+
+function rememberPhoto(id: string, photo: Photo) {
+  photoCache.set(id, photo);
+  photoCacheBytes += photo.bytes.byteLength;
+  for (const [oldId, old] of photoCache) {
+    if (photoCacheBytes <= PHOTO_CACHE_BYTES) break;
+    photoCache.delete(oldId);
+    photoCacheBytes -= old.bytes.byteLength;
+  }
+}
+
+/**
+ * A gallery photo at tile size. The first request for a file goes to Drive;
+ * every visitor after that is served from memory. Throws when Drive has no
+ * thumbnail yet (an upload still processing) — the caller falls back to the
+ * original rather than caching the miss.
+ */
+export async function loadPhoto(id: string): Promise<Photo> {
+  const cached = photoCache.get(id);
+  if (cached) {
+    photoCache.delete(id);
+    photoCache.set(id, cached);
+    return cached;
+  }
+
+  const existing = photoInFlight.get(id);
+  if (existing) return existing;
+
+  const promise = (async () => {
+    const config = readDriveConfig();
+    if (!config) throw new Error("Drive not configured");
+    const { body, contentType } = await fetchFileThumbnail(config, id, PHOTO_WIDTH);
+    const photo = { bytes: await new Response(body).arrayBuffer(), contentType };
+    rememberPhoto(id, photo);
+    return photo;
+  })().finally(() => {
+    photoInFlight.delete(id);
+  });
+  photoInFlight.set(id, promise);
+  return promise;
+}
+
+/**
+ * Fetches a folder's new photos in the background as soon as they're listed,
+ * so not even the first visitor waits on Drive. Failures are left for the next
+ * listing (a minute later) to retry.
+ */
+function warmPhotos(ids: string[]) {
+  const queue = ids.filter((id) => !photoCache.has(id) && !photoInFlight.has(id));
+  const worker = async () => {
+    for (let id = queue.shift(); id; id = queue.shift()) {
+      await loadPhoto(id).catch(() => {});
+    }
+  };
+  for (let i = 0; i < Math.min(WARM_CONCURRENCY, queue.length); i++) void worker();
+}
+
 async function readFolder(folderId: string): Promise<FolderMedia> {
   const config = readDriveConfig();
   if (!config) return cache.get(folderId)?.media ?? EMPTY;
 
   try {
-    const media = split(await listFolderMedia(config, folderId));
+    const files = await listFolderMedia(config, folderId);
+    warmPhotos(files.filter((f) => f.mimeType.startsWith("image/")).map((f) => f.id));
+    const media = split(files);
     const videos = await Promise.all(
       media.videos.map(async (video) => ({
         ...video,
