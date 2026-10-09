@@ -26,8 +26,8 @@ export const houseById = (id: HouseId) => houseRoster.find((house) => house.id =
 export type Sport = { slug: string; name: string; date: string; venue: string; events: string[]; kind: "knockout" | "race" };
 export const sports: Sport[] = [
   { slug: "cricket", name: "Cricket", date: "17 OCT", venue: "St. John's Ground", events: ["Final"], kind: "knockout" },
-  { slug: "football", name: "Football", date: "10 OCT", venue: "Venue to be confirmed", events: ["Final"], kind: "knockout" },
-  { slug: "badminton", name: "Badminton", date: "10 OCT", venue: "Venue to be confirmed", events: ["Men's Singles", "Women's Singles", "Men's Doubles", "Mixed Doubles"], kind: "knockout" },
+  { slug: "football", name: "Football", date: "10 OCT", venue: "Coolulu Turf Park, Koramangala", events: ["Final"], kind: "knockout" },
+  { slug: "badminton", name: "Badminton", date: "10 OCT", venue: "Coolulu Turf Park, Koramangala", events: ["Men's Singles", "Women's Singles", "Men's Doubles", "Mixed Doubles"], kind: "knockout" },
   { slug: "table-tennis", name: "Table Tennis", date: "08—09 OCT", venue: "Bright Money Office", events: ["Men's Singles", "Women's Singles", "Men's Doubles"], kind: "knockout" },
   { slug: "carrom", name: "Carrom", date: "06—07 OCT", venue: "Bright Money Office", events: ["Men's Singles", "Women's Singles", "Men's Doubles", "Women's Doubles"], kind: "knockout" },
   { slug: "chess", name: "Chess", date: "13 OCT", venue: "Bright Money Office", events: ["Final"], kind: "knockout" },
@@ -45,7 +45,8 @@ export const schedule: ScheduleDay[] = [
   { date: "07 OCT", weekday: "WED", title: "Carrom Doubles", events: ["Carrom Men's Doubles", "Carrom Women's Doubles"], venue: "Bright Money Office", time: "4:00 PM – 6:30 PM", sportSlug: "carrom" },
   { date: "08 OCT", weekday: "THU", title: "Table Tennis Singles", events: ["Table Tennis Men's Singles", "Table Tennis Women's Singles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
   { date: "09 OCT", weekday: "FRI", title: "Table Tennis Doubles", events: ["Table Tennis Men's Doubles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
-  { date: "10 OCT", weekday: "SAT", title: "Football & Badminton", events: ["Football", "Badminton"], venue: "Venue to be confirmed", sportSlug: "football" },
+  { date: "10 OCT", weekday: "SAT", title: "Football", events: ["Football"], venue: "Coolulu Turf Park, Koramangala", time: "9:30 AM – 1:00 PM", sportSlug: "football" },
+  { date: "10 OCT", weekday: "SAT", title: "Badminton", events: ["Badminton"], venue: "Coolulu Turf Park, Koramangala", time: "2:30 PM – 7:00 PM", sportSlug: "badminton" },
   { date: "13 OCT", weekday: "TUE", title: "Chess", events: ["Chess"], venue: "Bright Money Office", sportSlug: "chess" },
   { date: "14 OCT", weekday: "WED", title: "Foosball", events: ["Foosball"], venue: "Bright Money Office", sportSlug: "foosball" },
   { date: "15 OCT", weekday: "THU", title: "Darts", events: ["Darts"], venue: "Bright Money Office", sportSlug: "darts" },
