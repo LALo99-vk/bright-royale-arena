@@ -35,7 +35,7 @@ export const sports: Sport[] = [
   { slug: "darts", name: "Darts", date: "15 OCT", venue: "Bright Money Office", events: ["Final"], kind: "knockout" },
   { slug: "relay", name: "Relay", date: "17 OCT", venue: "St. John's Ground", events: ["Men's", "Women's"], kind: "race" },
   { slug: "100m-sprint", name: "100m Sprint", date: "17 OCT", venue: "St. John's Ground", events: ["Men's", "Women's"], kind: "race" },
-  { slug: "tug-of-war", name: "Tug of War", date: "10 OCT", venue: "Venue to be confirmed", events: ["Final"], kind: "knockout" },
+  { slug: "tug-of-war", name: "Tug of War", date: "16 OCT", venue: "Venue to be confirmed", events: ["Final"], kind: "knockout" },
 ];
 
 export type ScheduleDay = { date: string; weekday: string; title: string; events: string[]; venue: string; time?: string; finale?: boolean; sportSlug?: string };
@@ -45,10 +45,11 @@ export const schedule: ScheduleDay[] = [
   { date: "07 OCT", weekday: "WED", title: "Carrom Doubles", events: ["Carrom Men's Doubles", "Carrom Women's Doubles"], venue: "Bright Money Office", time: "4:00 PM – 6:30 PM", sportSlug: "carrom" },
   { date: "08 OCT", weekday: "THU", title: "Table Tennis Singles", events: ["Table Tennis Men's Singles", "Table Tennis Women's Singles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
   { date: "09 OCT", weekday: "FRI", title: "Table Tennis Doubles", events: ["Table Tennis Men's Doubles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
-  { date: "10 OCT", weekday: "SAT", title: "Football, Badminton & Tug of War", events: ["Football", "Badminton", "Tug of War"], venue: "Venue to be confirmed", sportSlug: "football" },
+  { date: "10 OCT", weekday: "SAT", title: "Football & Badminton", events: ["Football", "Badminton"], venue: "Venue to be confirmed", sportSlug: "football" },
   { date: "13 OCT", weekday: "TUE", title: "Chess", events: ["Chess"], venue: "Bright Money Office", sportSlug: "chess" },
   { date: "14 OCT", weekday: "WED", title: "Foosball", events: ["Foosball"], venue: "Bright Money Office", sportSlug: "foosball" },
   { date: "15 OCT", weekday: "THU", title: "Darts", events: ["Darts"], venue: "Bright Money Office", sportSlug: "darts" },
+  { date: "16 OCT", weekday: "FRI", title: "Tug of War", events: ["Tug of War"], venue: "Venue to be confirmed", sportSlug: "tug-of-war" },
   { date: "17 OCT", weekday: "SAT", title: "Championship Finale", events: ["Cricket", "Relay", "100m Sprint"], venue: "St. John's Ground", finale: true, sportSlug: "cricket" },
 ];
 
