@@ -47,7 +47,7 @@ export const schedule: ScheduleDay[] = [
   { date: "09 OCT", weekday: "FRI", title: "Table Tennis Doubles", events: ["Table Tennis Men's Doubles"], venue: "Bright Money Office", sportSlug: "table-tennis" },
   { date: "10 OCT", weekday: "SAT", title: "Football", events: ["Football"], venue: "Coolulu Turf Park, Koramangala", time: "9:30 AM – 1:00 PM", sportSlug: "football" },
   { date: "10 OCT", weekday: "SAT", title: "Badminton", events: ["Badminton"], venue: "Coolulu Turf Park, Koramangala", time: "2:30 PM – 7:00 PM", sportSlug: "badminton" },
-  { date: "13 OCT", weekday: "TUE", title: "Chess", events: ["Chess"], venue: "Bright Money Office", sportSlug: "chess" },
+  { date: "13 OCT", weekday: "TUE", title: "Chess", events: ["Chess"], venue: "Bright Money Office", time: "4:00 PM – 6:00 PM", sportSlug: "chess" },
   { date: "14 OCT", weekday: "WED", title: "Foosball", events: ["Foosball"], venue: "Bright Money Office", sportSlug: "foosball" },
   { date: "15 OCT", weekday: "THU", title: "Darts", events: ["Darts"], venue: "Bright Money Office", sportSlug: "darts" },
   { date: "16 OCT", weekday: "FRI", title: "Tug of War", events: ["Tug of War"], venue: "Venue to be confirmed", sportSlug: "tug-of-war" },
@@ -57,8 +57,8 @@ export const schedule: ScheduleDay[] = [
 export type Rule = { section: string; text: string };
 
 /**
- * House rules per sport, summarised from the organisers' rulebook
- * ("Rules and Game Format — Carrom & Table Tennis"). Shown on every tournament
+ * House rules per sport, summarised from the organisers' rulebooks
+ * ("Rules and Game Format — Carrom & Table Tennis" / "— Chess & Foosball"). Shown on every tournament
  * page of that sport; a sport with no entry shows no rules section at all.
  * `doubles` rules are added only on a doubles draw.
  */
@@ -76,6 +76,17 @@ export const sportRules: Record<string, { all: Rule[]; doubles?: Rule[] }> = {
     ],
     doubles: [
       { section: "Doubles", text: "Two players per team, striking alternately." },
+    ],
+  },
+  chess: {
+    all: [
+      { section: "Match format", text: "Singles, one player against one. Each match is a single game, and the player who checkmates the opponent wins." },
+      { section: "Clock", text: "Each player has 10 minutes on the clock. A player who runs out of time loses the game." },
+      { section: "Moves", text: "Move each piece only according to its legal movement. You may not make a move that leaves your own king in check. Press the clock after completing your move." },
+      { section: "Winning", text: "Checkmate is an immediate win. A player also wins if the opponent resigns or runs out of time, subject to the insufficient-material exception." },
+      { section: "Draws", text: "The game is a draw if neither player has enough pieces to deliver checkmate (for example, only the two kings are left), or on stalemate: a player has no legal move but their king is not in check." },
+      { section: "Tie-break", text: "If a knockout match needs a winner and the game is drawn, a 5-minute tie-break game is played, as determined by the tournament referee." },
+      { section: "Conduct", text: "Arrive 10 minutes before your match. No outside assistance during the game, and don't distract or disturb your opponent. Referee decisions are final." },
     ],
   },
 };
