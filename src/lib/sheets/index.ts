@@ -338,12 +338,14 @@ export function buildFromTabs(
 
     const { rounds, warnings: tabWarnings, courtLabel } = parseMatchTab(config.sheetTab, grid);
     warnings.push(...tabWarnings);
-    if (!rounds.length) continue;
 
     const template = fallbackTournaments.find((t) => t.slug === config.slug);
     const base = template ? applyConfig(template, config) : blankTournament(config.slug, config);
 
-    const withFacts = applyFacts(base, rounds, courtLabel);
+    // Published before the draw is in: the page goes up with its details and
+    // rules, and Matches says the draw is on its way. Counting an empty draw
+    // would advertise "0 teams", so the field is left to its fallback.
+    const withFacts = rounds.length ? applyFacts(base, rounds, courtLabel) : base;
     built.set(config.slug, { ...withFacts, rounds, ...(courtLabel ? { courtLabel } : {}) });
     fromSheet.push(config.slug);
   }

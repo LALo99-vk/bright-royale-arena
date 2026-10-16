@@ -58,7 +58,7 @@ export type Rule = { section: string; text: string };
 
 /**
  * House rules per sport, summarised from the organisers' rulebooks
- * ("Rules and Game Format — Carrom & Table Tennis" / "— Chess & Foosball"). Shown on every tournament
+ * ("Rules and Game Format — Carrom & Table Tennis" / "— Chess & Foosball" / "— Cricket"). Shown on every tournament
  * page of that sport; a sport with no entry shows no rules section at all.
  * `doubles` rules are added only on a doubles draw.
  */
@@ -87,6 +87,22 @@ export const sportRules: Record<string, { all: Rule[]; doubles?: Rule[] }> = {
       { section: "Draws", text: "The game is a draw if neither player has enough pieces to deliver checkmate (for example, only the two kings are left), or on stalemate: a player has no legal move but their king is not in check." },
       { section: "Tie-break", text: "If a knockout match needs a winner and the game is drawn, a 5-minute tie-break game is played, as determined by the tournament referee." },
       { section: "Conduct", text: "Arrive 10 minutes before your match. No outside assistance during the game, and don't distract or disturb your opponent. Referee decisions are final." },
+    ],
+  },
+  // "Rules and Game Format — Cricket", plus the organisers' opening-over rule
+  // sent to captains on 16 Oct.
+  cricket: {
+    all: [
+      { section: "Teams", text: "Each team may register up to 15 players. Up to 12 players, including at least one female player, may play in each match. Substitutions are allowed only for an injury, with the referee's approval." },
+      { section: "Match format", text: "Each team plays 10 + 1 overs per innings. One over must be played by a female player. Each over is 6 legal deliveries. The team scoring the most runs at the end of its innings wins." },
+      { section: "Opening over", text: "A female player from the fielding team bowls the first over, and a female player from the batting team faces it. If she is dismissed, the remaining deliveries of that over count as dot balls and the over is complete. This applies only to the preliminary girls' over." },
+      { section: "Powerplay", text: "The first two overs of each innings are the powerplay: no more than two fielders outside the inner circle at the moment of delivery. From the third over the restriction ends. The umpire decides whether it has been breached and applies the agreed penalty." },
+      { section: "Batting", text: "All 12 players in the team may bat. Whenever a female player is batting, the delivery must be bowled by a female player from the opposing team." },
+      { section: "Bowling", text: "2 bowlers may bowl a maximum of 3 overs. Wides and no-balls don't count as one of the 6 legal deliveries. No chucking: every delivery must use a legal bowling action." },
+      { section: "Scoring & extras", text: "Runs scored by the batters and extras such as wides and no-balls count toward the team total. A wide or no-ball gives at least one extra run, and an extra delivery is bowled." },
+      { section: "Dismissals", text: "Bowled, caught, run out and stumped. LBW does not apply. A team that is all out before 10 overs can't let its female player bat the remaining overs. The umpire's decision is final." },
+      { section: "Tie-breaker", text: "If both teams finish on the same score, a Super Over decides the winner." },
+      { section: "Conduct", text: "Arrive 10 minutes before the match. Misconduct, dangerous play, deliberate physical contact or unsportsmanlike behaviour may lead to disqualification. Umpire and referee decisions are final." },
     ],
   },
 };
