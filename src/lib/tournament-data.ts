@@ -80,6 +80,7 @@ export type TournamentPage = Pick<
   | "courtLabel"
   | "rounds"
   | "race"
+  | "medalsOnly"
   | "format"
   | "teams"
   | "dates"
@@ -142,6 +143,7 @@ function pageFor(t: Tournament, points: Awaited<ReturnType<typeof loadSheetData>
     courtLabel: t.courtLabel,
     rounds: t.rounds,
     race: t.race,
+    medalsOnly: t.medalsOnly,
     format: t.format,
     teams: t.teams,
     dates: t.dates,

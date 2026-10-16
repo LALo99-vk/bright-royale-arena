@@ -193,6 +193,8 @@ export type Tournament = {
   rounds: BracketRound[];
   /** Heats to a final, for the races. Set instead of `rounds`. */
   race?: RaceRound[] | undefined;
+  /** Played off the sheet: no draw, just the podium ("None" as its Sheet Tab). */
+  medalsOnly?: boolean | undefined;
   gallery: { src: string; caption: string }[];
   videos: {
     id: string;

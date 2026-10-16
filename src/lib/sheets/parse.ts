@@ -821,6 +821,7 @@ export function parseGroupsTab(grid: SheetGrid): { groups: Group[]; warnings: Pa
 
 export type TournamentConfig = {
   slug: string;
+  /** Empty for a medals-only event — see `isNoDraw`. */
   sheetTab: string;
   visible: boolean;
   sport?: string;
@@ -883,6 +884,17 @@ function normalizeParticipants(value: string): ParticipantKind | undefined {
   if (["doubles", "double", "pairs", "pair"].includes(key)) return "doubles";
   if (["singles", "single", "individual", "solo"].includes(key)) return "singles";
   return undefined;
+}
+
+/**
+ * "None" in the Sheet Tab column: an event played off the sheet, with no draw
+ * to show — darts, where the desk only ever had the podium. A blank cell still
+ * means "the tab named after the sport", so this has to be said out loud.
+ */
+function isNoDraw(value: string) {
+  return (
+    ["none", "nodraw", "medalsonly", "na"].includes(normalizeHeader(value)) || value.trim() === "-"
+  );
 }
 
 /** Anything other than an explicit "no" counts as visible. */
@@ -959,7 +971,9 @@ export function parseTournamentsTab(grid: SheetGrid): {
     configs.push({
       slug,
       // Falls back to a tab named after the sport, then the slug itself.
-      sheetTab: read(row, "sheetTab") || read(row, "sport") || slug,
+      sheetTab: isNoDraw(read(row, "sheetTab"))
+        ? ""
+        : read(row, "sheetTab") || read(row, "sport") || slug,
       visible: isVisible(read(row, "visible")),
       ...(optional("sport") ? { sport: optional("sport") as string } : {}),
       ...(optional("name") ? { name: optional("name") as string } : {}),

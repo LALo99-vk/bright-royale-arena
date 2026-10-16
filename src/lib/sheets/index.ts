@@ -308,6 +308,13 @@ export function buildFromTabs(
   for (const config of configs) {
     if (!config.visible && !options?.includeHidden) continue;
 
+    // No draw to read: the page is the row's details and its Results podium.
+    if (!config.sheetTab) {
+      built.set(config.slug, { ...blankTournament(config.slug, config), medalsOnly: true });
+      fromSheet.push(config.slug);
+      continue;
+    }
+
     const grid = findTab(tabs, config.sheetTab.trim().toLowerCase());
     if (!grid?.length) continue;
 
@@ -518,7 +525,10 @@ async function readSheet(force = false): Promise<SheetData> {
     // added the tab — so look the names up again rather than dropping the
     // tournament off the site until the cache turns over.
     const missing = built.configs.some(
-      (entry) => entry.visible && !findTab(tabs, entry.sheetTab.trim().toLowerCase())?.length,
+      (entry) =>
+        entry.visible &&
+        entry.sheetTab !== "" &&
+        !findTab(tabs, entry.sheetTab.trim().toLowerCase())?.length,
     );
     if (missing && !force) {
       tabs = await fetchAllTabs(config, { refreshTitles: true });

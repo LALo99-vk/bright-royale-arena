@@ -38,7 +38,8 @@ function TournamentPage() {
   const { side } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   useAutoRefresh(LIVE_REFRESH_MS);
-  const [tab, setTab] = useState<Tab>("Details");
+  // A medals-only event has no bracket, so its podium is the page.
+  const [tab, setTab] = useState<Tab>(sides[active]?.tournament.medalsOnly ? "Winners" : "Details");
   const picked = sides.findIndex((s) => s.side && sideKey(s.side) === side);
   const current = picked >= 0 ? picked : active;
   const view = sides[current] ?? sides[0];
@@ -50,7 +51,7 @@ function TournamentPage() {
       {sides.length > 1 && <div className="side-switch" role="group" aria-label="Choose a draw">{sides.map((s, i) => <button key={s.tournament.slug} type="button" aria-pressed={i === current} onClick={() => navigate({ search: { side: sideKey(s.side ?? "") }, replace: true, resetScroll: false })}>{s.side}</button>)}</div>}
     </div></div></section>
 
-    <div className="sport-tabs-bar"><div className="page-width view-tabs" role="tablist" aria-label="Tournament sections">{TABS.map(item => <Button key={item} variant="ghost" role="tab" aria-selected={tab === item} className={tab === item ? "view-tab active" : "view-tab"} onClick={() => setTab(item)}>{item}</Button>)}<RefreshButton fetchedAt={fetchedAt} className="ml-auto pl-4"/></div></div>
+    <div className="sport-tabs-bar"><div className="page-width view-tabs" role="tablist" aria-label="Tournament sections">{TABS.filter(item => !(t.medalsOnly && item === "Matches")).map(item => <Button key={item} variant="ghost" role="tab" aria-selected={tab === item} className={tab === item ? "view-tab active" : "view-tab"} onClick={() => setTab(item)}>{item}</Button>)}<RefreshButton fetchedAt={fetchedAt} className="ml-auto pl-4"/></div></div>
 
     <section className="page-width sport-content">
       {tab === "Details" && <div className="sport-details">
